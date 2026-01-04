@@ -13,7 +13,7 @@
     height: 56px;
     border-radius: 50%;
 
-    background-color: #426EAC; /* Clarety Blue */
+    background: linear-gradient(135deg, #426EAC, #81A638); /* Clarety Blue */
     color: white;
 
     font-size: 24px;
@@ -92,27 +92,59 @@
 /* ===== AI Widget Panel ===== */
 #clarety-ai-panel {
   position: fixed;
-  bottom: 96px;          /* sits above the button */
+  bottom: 88px;
   right: 24px;
 
-  width: 480px;
+  width: 520px;
   height: 720px;
 
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 48px rgba(0,0,0,0.25);
+  background: #ffffff;
+  border-radius: 20px;
+
+  box-shadow: 0 12px 32px rgba(66,110,172,0.25);
 
   overflow: hidden;
   z-index: 9997;
 
-  /* Hidden by default */
   opacity: 0;
-  transform: translateY(24px) scale(0.98);
+  transform: translateY(16px);
   pointer-events: none;
 
   transition:
     opacity 0.25s ease,
     transform 0.25s ease;
+}
+.clarety-ai-header {
+  background: #426EAC;
+  color: white;
+
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 20px 20px 0 0;
+}
+
+.clarety-ai-header span {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.clarety-ai-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.clarety-ai-close:hover {
+  opacity: 1;
 }
 
 /* When open */
@@ -161,7 +193,12 @@ gen-search-widget iframe {
   <p>This is a test page.</p>
 
   <!-- Vertex AI Widget -->
-  <div id="clarety-ai-panel">
+ <div id="clarety-ai-panel">
+  <div class="clarety-ai-header">
+    <span>Clarety Care Assistant</span>
+    <button class="clarety-ai-close" id="clarety-ai-close">×</button>
+  </div>
+
   <gen-search-widget
     configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
     triggerId="clarety-ai-trigger">
@@ -206,6 +243,12 @@ const triggerBtn = document.getElementById('clarety-ai-trigger');
 if (panel && triggerBtn) {
   triggerBtn.addEventListener('click', () => {
     panel.classList.toggle('open');
+  });
+}
+  const closeBtn = document.getElementById('clarety-ai-close');
+if (closeBtn && panel) {
+  closeBtn.addEventListener('click', () => {
+    panel.classList.remove('open');
   });
 }
 </script>
