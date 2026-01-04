@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clarety Core AI – Widget Test</title>
+
+  <!-- Google Gen App Builder widget script -->
+  <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+  <style>
+    body {
+      font-family: Inter, system-ui, Arial, sans-serif;
+      padding: 40px;
+      background: #f6f7f9;
+    }
+
+    h1 {
+      color: #426EAC;
+    }
+
+    /* Floating launcher button */
+    #chat-launcher {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #81A638; /* Clarety Green */
+      color: white;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Clarety Core AI – Widget Test</h1>
+  <p>This is a live test of the Vertex AI search/chat widget.</p>
+
+  <!-- Widget (hidden until triggered) -->
+  <gen-search-widget
+    configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
+    triggerId="searchWidgetTrigger">
+  </gen-search-widget>
+
+  <!-- Floating trigger -->
+  <div id="searchWidgetTrigger">
+    💬 Ask Clarety AI
+  </div>
+
+</body>
+</html>
