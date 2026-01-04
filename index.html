@@ -177,7 +177,12 @@ gen-search-widget iframe {
     bottom: 16px;
     right: 16px;
   }
-
+.clarety-ai-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  pointer-events: none;
+}
   .clarety-helper {
     bottom: 88px;
     right: 16px;
@@ -211,7 +216,11 @@ gen-search-widget iframe {
 
   <!-- Button that opens the AI -->
   <button id="clarety-ai-trigger" class="clarety-ai-button">
-  💬
+  <img
+    src="assets/ClaretyAIimage.png"
+    alt="Ask Clarety AI"
+    class="clarety-ai-icon"
+  />
 </button>
 
   <!-- Google script -->
