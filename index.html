@@ -152,7 +152,7 @@
   pointer-events: auto;
 }
 gen-search-widget {
-  height: 100%;
+  height: calc(100% - 52px); /* header height */
   display: block;
 }
 
@@ -245,13 +245,17 @@ const triggerBtn = document.getElementById('clarety-ai-trigger');
 
 if (panel && triggerBtn) {
   triggerBtn.addEventListener('click', () => {
-    panel.classList.toggle('open');
-  });
+  panel.classList.add('open');
+});
 }
   const closeBtn = document.getElementById('clarety-ai-close');
 if (closeBtn && panel) {
   closeBtn.addEventListener('click', () => {
     panel.classList.remove('open');
+    
+  // Restore helper bubble
+    helper.style.opacity = '1';
+    helper.style.transform = 'translateY(0)';
   });
 }
 </script>
