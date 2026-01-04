@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <title>Clarety AI</title>
   <style>
   .clarety-ai-button {
     position: fixed;
@@ -69,11 +72,23 @@
 
     max-width: 220px;
   }
+.clarety-ai-button {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.clarety-ai-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.clarety-ai-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
 
 </style>
-<head>
-  <meta charset="UTF-8">
-  <title>Clarety AI</title>
+
 </head>
 
 <body>
