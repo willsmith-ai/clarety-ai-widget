@@ -1,5 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+  .clarety-ai-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+
+    background-color: #426EAC; /* Clarety Blue */
+    color: white;
+
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+
+  .clarety-ai-button:hover {
+    background-color: #365b8a;
+  }
+</style>
 <head>
   <meta charset="UTF-8">
   <title>Clarety AI</title>
@@ -17,9 +42,9 @@
   </gen-search-widget>
 
   <!-- Button that opens the AI -->
-  <button id="clarety-ai-trigger">
-    Ask Clarety AI
-  </button>
+  <button id="clarety-ai-trigger" class="clarety-ai-button">
+  💬
+</button>
 
   <!-- Google script -->
   <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
