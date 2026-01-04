@@ -1,195 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8" />
   <title>Clarety AI</title>
+
   <style>
-  .clarety-ai-button {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+    .clarety-ai-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
 
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
 
-  background-color: #426EAC; /* fallback */
-  background-image: url("assets/ClaretyAIimage.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 56px 56px; /* 👈 THIS fixes the giant image */
+      background-color: #426EAC;
+      background-image: url("assets/ClaretyAIimage.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 36px 36px;
 
-  border: none;
-  cursor: pointer;
+      border: none;
+      cursor: pointer;
 
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  z-index: 9999;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      z-index: 9999;
 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-  .clarety-ai-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-  }
+    .clarety-ai-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
 
-  .clarety-ai-button::after {
-    content: "Ask Clarety AI";
-    position: absolute;
-    right: 68px;
-    white-space: nowrap;
+    .clarety-ai-button::after {
+      content: "Ask Clarety AI";
+      position: absolute;
+      right: 68px;
+      white-space: nowrap;
 
-    background: #1f2937;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
+      background: #1f2937;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
 
-    font-size: 13px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
 
-  .clarety-ai-button:hover::after {
-    opacity: 1;
-  }
-  .clarety-helper {
-  position: fixed;
-  bottom: 96px;
-  right: 24px;
+    .clarety-ai-button:hover::after {
+      opacity: 1;
+    }
 
-  background: white;
-  color: #1f2937;
+    .clarety-helper {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
 
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
+      background: white;
+      color: #1f2937;
 
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  z-index: 9998;
-  max-width: 220px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
 
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.clarety-ai-button {
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      z-index: 9998;
+      max-width: 220px;
 
-.clarety-ai-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
 
-.clarety-ai-button:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-/* ===== AI Widget Panel ===== */
-#clarety-ai-panel {
-  position: fixed;
-  bottom: 88px;
-  right: 24px;
-
-  width: 520px;
-  height: 720px;
-
-  background: #ffffff;
-  border-radius: 20px;
-
-  box-shadow: 0 12px 32px rgba(66,110,172,0.25);
-
-  overflow: hidden;
-  z-index: 9997;
-
-  opacity: 0;
-  transform: translateY(16px);
-  pointer-events: none;
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-.clarety-ai-header {
-  background: #426EAC;
-  color: white;
-
-  padding: 14px 20px;
-  font-size: 16px;
-  font-weight: 600;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border-radius: 20px 20px 0 0;
-}
-
-.clarety-ai-header span {
-  font-weight: 500;
-  opacity: 0.95;
-}
-
-.clarety-ai-close {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: 0.85;
-}
-
-.clarety-ai-close:hover {
-  opacity: 1;
-}
-
-/* When open */
-#clarety-ai-panel.open {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-gen-search-widget {
-  display: block;
-  height: calc(100% - 52px); /* header height */
-}
-
-gen-search-widget iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
     @media (max-width: 768px) {
-  #clarety-ai-panel {
-    bottom: 0;
-    right: 0;
-    left: 0;
+      .clarety-ai-button {
+        bottom: 16px;
+        right: 16px;
+      }
 
-    width: 100vw;
-    height: 90vh;
-
-    border-radius: 16px 16px 0 0;
-  }
-
-  .clarety-ai-button {
-    bottom: 16px;
-    right: 16px;
-  }
-.clarety-ai-icon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  pointer-events: none;
-}
-  .clarety-helper {
-    bottom: 88px;
-    right: 16px;
-    max-width: 260px;
-  }
-</style>
-
+      .clarety-helper {
+        bottom: 88px;
+        right: 16px;
+        max-width: 260px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -197,69 +96,45 @@ gen-search-widget iframe {
   <h1>Clarety Core AI</h1>
   <p>This is a test page.</p>
 
-  <!-- Vertex AI Widget -->
- <div id="clarety-ai-panel">
-  <div class="clarety-ai-header">
-    <span>Clarety Care Assistant</span>
-    <button class="clarety-ai-close" id="clarety-ai-close">×</button>
-  </div>
-
+  <!-- Google Gen Search Widget (Google-managed popup) -->
   <gen-search-widget
     configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
+    triggerId="clarety-ai-trigger">
   </gen-search-widget>
-</div>
 
   <div class="clarety-helper">
-  Have a question? <strong>Ask Clarety AI</strong>
-</div>
+    Have a question? <strong>Ask Clarety AI</strong>
+  </div>
 
-  <!-- Button that opens the AI -->
-  <button id="clarety-ai-trigger" class="clarety-ai-button" aria-label="Ask Clarety AI">
-    
+  <button
+    id="clarety-ai-trigger"
+    class="clarety-ai-button"
+    aria-label="Ask Clarety AI">
   </button>
 
-  <!-- Google script -->
   <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
-<script>
-  // Show helper after a short delay
-  setTimeout(() => {
+
+  <script>
+    // Show helper after delay
+    setTimeout(() => {
+      const helper = document.querySelector('.clarety-helper');
+      if (helper) {
+        helper.style.opacity = '1';
+        helper.style.transform = 'translateY(0)';
+      }
+    }, 1200);
+
+    // Hide helper once AI is opened
+    const trigger = document.getElementById('clarety-ai-trigger');
     const helper = document.querySelector('.clarety-helper');
-    if (helper) {
-      helper.style.opacity = '1';
-      helper.style.transform = 'translateY(0)';
+
+    if (trigger && helper) {
+      trigger.addEventListener('click', () => {
+        helper.style.opacity = '0';
+        helper.style.transform = 'translateY(8px)';
+      });
     }
-  }, 1200);
-  
-  // Hide helper when AI is opened
-  const trigger = document.getElementById('clarety-ai-trigger');
-  const helper = document.querySelector('.clarety-helper');
-
-  if (trigger && helper) {
-    trigger.addEventListener('click', () => {
-      helper.style.opacity = '0';
-      helper.style.transform = 'translateY(8px)';
-    });
-  }
-  // Toggle AI panel open/close
-const panel = document.getElementById('clarety-ai-panel');
-const triggerBtn = document.getElementById('clarety-ai-trigger');
-
-if (panel && triggerBtn) {
-  triggerBtn.addEventListener('click', () => {
-  panel.classList.add('open');
-});
-}
-  const closeBtn = document.getElementById('clarety-ai-close');
-if (closeBtn && panel) {
-  closeBtn.addEventListener('click', () => {
-    panel.classList.remove('open');
-    
-  // Restore helper bubble
-    helper.style.opacity = '1';
-    helper.style.transform = 'translateY(0)';
-  });
-}
-</script>
+  </script>
 
 </body>
 </html>
