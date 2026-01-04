@@ -52,6 +52,24 @@
   .clarety-ai-button:hover::after {
     opacity: 1;
   }
+  .clarety-helper {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+
+    background: white;
+    color: #1f2937;
+
+    padding: 12px 16px;
+    border-radius: 12px;
+
+    font-size: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    z-index: 9998;
+
+    max-width: 220px;
+  }
+
 </style>
 <head>
   <meta charset="UTF-8">
@@ -68,6 +86,10 @@
     configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
     triggerId="clarety-ai-trigger">
   </gen-search-widget>
+
+  <div class="clarety-helper">
+  Have a question? <strong>Ask Clarety AI</strong>
+</div>
 
   <!-- Button that opens the AI -->
   <button id="clarety-ai-trigger" class="clarety-ai-button">
