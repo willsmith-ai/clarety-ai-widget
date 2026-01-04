@@ -89,7 +89,46 @@
   transform: translateY(0);
   box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
+/* ===== AI Widget Panel ===== */
+#clarety-ai-panel {
+  position: fixed;
+  bottom: 96px;          /* sits above the button */
+  right: 24px;
 
+  width: 360px;
+  height: 480px;
+
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.25);
+
+  overflow: hidden;
+  z-index: 9997;
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* When open */
+#clarety-ai-panel.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+gen-search-widget {
+  height: 100%;
+  display: block;
+}
+
+gen-search-widget iframe {
+  border-radius: 16px;
+}
 </style>
 
 </head>
@@ -100,10 +139,12 @@
   <p>This is a test page.</p>
 
   <!-- Vertex AI Widget -->
+  <div id="clarety-ai-panel">
   <gen-search-widget
     configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
     triggerId="clarety-ai-trigger">
   </gen-search-widget>
+</div>
 
   <div class="clarety-helper">
   Have a question? <strong>Ask Clarety AI</strong>
@@ -136,6 +177,15 @@
       helper.style.transform = 'translateY(8px)';
     });
   }
+  // Toggle AI panel open/close
+const panel = document.getElementById('clarety-ai-panel');
+const triggerBtn = document.getElementById('clarety-ai-trigger');
+
+if (panel && triggerBtn) {
+  triggerBtn.addEventListener('click', () => {
+    panel.classList.toggle('open');
+  });
+}
 </script>
 
 </body>
