@@ -5,30 +5,28 @@
   <title>Clarety AI</title>
   <style>
   .clarety-ai-button {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
 
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
 
-    background: linear-gradient(135deg, #426EAC, #81A638); /* Clarety Blue */
-    color: white;
+  background-color: #426EAC; /* fallback */
+  background-image: url("assets/ClaretyAIimage.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 28px 28px; /* 👈 THIS fixes the giant image */
 
-    font-size: 24px;
-    border: none;
-    cursor: pointer;
+  border: none;
+  cursor: pointer;
 
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  z-index: 9999;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
   .clarety-ai-button:hover {
     transform: translateY(-2px);
@@ -215,13 +213,9 @@ gen-search-widget iframe {
 </div>
 
   <!-- Button that opens the AI -->
-  <button id="clarety-ai-trigger" class="clarety-ai-button">
-  <img
-    src="assets/ClaretyAIimage.png"
-    alt="Ask Clarety AI"
-    class="clarety-ai-icon"
-  />
-</button>
+  <button id="clarety-ai-trigger" class="clarety-ai-button" aria-label="Ask Clarety AI">
+    
+  </button>
 
   <!-- Google script -->
   <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
