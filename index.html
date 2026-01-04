@@ -152,12 +152,14 @@
   pointer-events: auto;
 }
 gen-search-widget {
-  height: calc(100% - 52px); /* header height */
   display: block;
+  height: calc(100% - 52px); /* header height */
 }
 
 gen-search-widget iframe {
-  border-radius: 16px;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
     @media (max-width: 768px) {
   #clarety-ai-panel {
@@ -204,7 +206,6 @@ gen-search-widget iframe {
 
   <gen-search-widget
     configId="daf2c9fb-1be8-420d-a2b0-76dffee56612"
-    triggerId="clarety-ai-trigger">
   </gen-search-widget>
 </div>
 
