@@ -5,28 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clarety Core AI</title>
     <style>
-        /* This makes the page look nice and centers the chat */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        
-        /* Widget Styling */
         .chat-container { width: 400px; height: 600px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
         .chat-header { background-color: #007bff; color: white; padding: 20px; text-align: center; font-weight: bold; font-size: 18px; }
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        
-        /* Message Bubbles */
-        .message { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
+        .message { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
         .message.user { background-color: #007bff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .message.bot { background-color: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
-        
-        /* Input Area */
         .chat-input-area { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
         input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
         button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
         button:hover { background-color: #0056b3; }
-        
-        /* Document Links */
-        .doc-link { display: block; margin-top: 5px; color: #007bff; text-decoration: none; font-size: 12px; }
-        .doc-link:hover { text-decoration: underline; }
+        .doc-link { display: block; margin-top: 8px; color: #007bff; text-decoration: none; font-size: 13px; background: rgba(0,123,255,0.1); padding: 5px 10px; border-radius: 5px; }
+        .doc-link:hover { background: rgba(0,123,255,0.2); }
     </style>
 </head>
 <body>
@@ -37,29 +28,31 @@
         <div class="message bot">Hello! I am connected to the Clarety Knowledge Database. Ask me anything.</div>
     </div>
     <div class="chat-input-area">
-        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="handleEnter(event)">
+        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="if(event.key === 'Enter') sendMessage()">
         <button onclick="sendMessage()">Send</button>
     </div>
 </div>
 
 <script>
-    // ✅ THIS IS CONNECTED TO YOUR RENDER BACKEND
+    // YOUR RENDER URL
     const API_URL = "https://claretycoreapi.onrender.com/chat";
+    let isProcessing = false;
 
     async function sendMessage() {
+        if (isProcessing) return; // Prevent double sending
+        
         const inputField = document.getElementById("userInput");
         const message = inputField.value.trim();
         if (!message) return;
 
-        // 1. Show User Message
+        isProcessing = true;
         addMessage(message, "user");
         inputField.value = "";
 
-        // 2. Show Loading...
+        // Show loading state
         const loadingId = addMessage("Searching...", "bot");
 
         try {
-            // 3. Send to Backend
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -68,11 +61,14 @@
             
             const data = await response.json();
             
-            // 4. Remove Loading and Show Answer
-            document.getElementById(loadingId).remove();
+            // Remove loading message
+            const loadingMsg = document.getElementById(loadingId);
+            if(loadingMsg) loadingMsg.remove();
+
+            // Show actual answer
             addMessage(data.answer, "bot");
 
-            // 5. Add Clickable Document Links
+            // Display Links
             if (data.links && data.links.length > 0) {
                 const messagesDiv = document.getElementById("messages");
                 const lastMsg = messagesDiv.lastElementChild;
@@ -88,7 +84,10 @@
 
         } catch (error) {
             console.error("Error:", error);
-            document.getElementById(loadingId).innerText = "Sorry, I couldn't connect to the server.";
+            const loadingMsg = document.getElementById(loadingId);
+            if(loadingMsg) loadingMsg.innerText = "Sorry, I couldn't connect to the server.";
+        } finally {
+            isProcessing = false;
         }
     }
 
@@ -101,10 +100,6 @@
         messagesDiv.appendChild(div);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
         return div.id;
-    }
-
-    function handleEnter(e) {
-        if (e.key === "Enter") sendMessage();
     }
 </script>
 
