@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clarety AI</title>
 <style>
-  /* --- 1. The Chat Bubble Button --- */
   .chat-btn {
     position: fixed;
     bottom: 24px;
@@ -13,35 +12,24 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    
-    /* Your original branding colors */
     background-color: #426EAC; 
     color: white;
-    
-    /* Icon styling */
     font-size: 30px;
     border: none;
     cursor: pointer;
     box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     z-index: 9999;
-    
-    /* Centering the icon */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
+  .chat-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
 
-  .chat-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-  }
-
-  /* --- 2. The Chat Window (Hidden by default) --- */
   .chat-window {
-    display: none; /* Hidden initially */
+    display: none; 
     position: fixed;
-    bottom: 110px; /* Above the button */
+    bottom: 110px; 
     right: 24px;
     width: 350px;
     height: 500px;
@@ -56,9 +44,8 @@
     overflow: hidden;
   }
 
-  /* Header */
   .chat-header {
-    background: #426EAC; /* Matches your button */
+    background: #426EAC; 
     color: white;
     padding: 15px;
     font-weight: bold;
@@ -67,9 +54,7 @@
     align-items: center;
   }
   .close-btn { cursor: pointer; font-size: 1.2rem; opacity: 0.8; }
-  .close-btn:hover { opacity: 1; }
 
-  /* Messages Area */
   .chat-messages {
     flex: 1;
     padding: 15px;
@@ -80,12 +65,10 @@
     gap: 10px;
   }
 
-  /* Message Bubbles */
   .message { padding: 10px 14px; border-radius: 15px; max-width: 85%; line-height: 1.4; font-size: 14px; }
   .user { background: #426EAC; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
   .bot { background: #e0e0e0; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 2px; }
 
-  /* Input Area */
   .chat-input-area {
     display: flex;
     border-top: 1px solid #ddd;
@@ -94,7 +77,6 @@
   }
   #userInput { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
   button.send { margin-left: 10px; padding: 10px 20px; background: #426EAC; color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
-  button.send:hover { background: #35588a; }
 </style>
 </head>
 <body>
@@ -119,7 +101,7 @@
   </div>
 
   <script>
-    // YOUR RENDER URL
+    // Ensure this matches your Render URL exactly
     const BACKEND_URL = "https://claretycoreapi.onrender.com/chat"; 
 
     // Counter to ensure every message has a unique ID
@@ -144,15 +126,11 @@
       const text = input.value.trim();
       if (!text) return;
 
-      // 1. Show User Message (Blue)
       addMessage(text, 'user');
       input.value = '';
 
-      // 2. Show "Thinking..." (Grey)
-      // We capture the ID of THIS specific bubble so we can update it later
-      const loadingBubbleId = addMessage("Thinking...", 'bot');
+      const loadingId = addMessage("Thinking...", 'bot');
 
-      // 3. Send to Backend
       try {
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
@@ -163,13 +141,12 @@
         if (!response.ok) throw new Error("Network error");
 
         const data = await response.json();
+        const botMsgDiv = document.getElementById(loadingId);
         
-        // 4. Update the "Thinking..." bubble with the real answer
-        const botMsgDiv = document.getElementById(loadingBubbleId);
         if (botMsgDiv) {
-            botMsgDiv.innerText = data.answer;
+            // Convert newlines to breaks for cleaner list display
+            botMsgDiv.innerHTML = data.answer.replace(/\n/g, "<br>");
             
-            // Add links if found
             if(data.links && data.links.length > 0) {
               const linkList = document.createElement('div');
               linkList.style.marginTop = "10px";
@@ -191,25 +168,21 @@
 
       } catch (error) {
         console.error(error);
-        const botMsgDiv = document.getElementById(loadingBubbleId);
+        const botMsgDiv = document.getElementById(loadingId);
         if (botMsgDiv) botMsgDiv.innerText = "I'm having trouble reaching the server. Please try again.";
       }
     }
 
     function addMessage(text, sender) {
-      msgCounter++; // Increment counter
+      msgCounter++; 
       const msgs = document.getElementById('messages');
       const div = document.createElement('div');
       div.className = `message ${sender}`;
       div.innerText = text;
-      
-      // Assign a 100% unique ID
-      const id = `msg-${msgCounter}`;
-      div.id = id;
-      
+      div.id = `msg-${msgCounter}`; // Unique ID
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
-      return id;
+      return div.id;
     }
   </script>
 
