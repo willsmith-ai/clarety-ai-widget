@@ -1,190 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clarety AI</title>
-<style>
-  .chat-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background-color: #426EAC; 
-    color: white;
-    font-size: 30px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .chat-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
-
-  .chat-window {
-    display: none; 
-    position: fixed;
-    bottom: 110px; 
-    right: 24px;
-    width: 350px;
-    height: 500px;
-    max-height: 80vh; 
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    flex-direction: column;
-    z-index: 9999;
-    font-family: Arial, sans-serif;
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-  }
-
-  .chat-header {
-    background: #426EAC; 
-    color: white;
-    padding: 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .close-btn { cursor: pointer; font-size: 1.2rem; opacity: 0.8; }
-
-  .chat-messages {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    background: #f9f9f9;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .message { padding: 10px 14px; border-radius: 15px; max-width: 85%; line-height: 1.4; font-size: 14px; }
-  .user { background: #426EAC; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-  .bot { background: #e0e0e0; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 2px; }
-
-  .chat-input-area {
-    display: flex;
-    border-top: 1px solid #ddd;
-    padding: 12px;
-    background: white;
-  }
-  #userInput { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
-  button.send { margin-left: 10px; padding: 10px 20px; background: #426EAC; color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarety Core AI</title>
+    <style>
+        /* This makes the page look nice and centers the chat */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        
+        /* Widget Styling */
+        .chat-container { width: 400px; height: 600px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { background-color: #007bff; color: white; padding: 20px; text-align: center; font-weight: bold; font-size: 18px; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Message Bubbles */
+        .message { max-width: 80%; padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
+        .message.user { background-color: #007bff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .message.bot { background-color: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
+        
+        /* Input Area */
+        .chat-input-area { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        
+        /* Document Links */
+        .doc-link { display: block; margin-top: 5px; color: #007bff; text-decoration: none; font-size: 12px; }
+        .doc-link:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
 
-  <h1>Clarety Core AI</h1>
-  <p>This is a test page.</p>
-
-  <button class="chat-btn" onclick="toggleChat()">💬</button>
-
-  <div class="chat-window" id="chatWindow">
-    <div class="chat-header">
-      <span>Clarety Helper</span>
-      <span class="close-btn" onclick="toggleChat()">✕</span>
-    </div>
+<div class="chat-container">
+    <div class="chat-header">Clarety Core AI</div>
     <div class="chat-messages" id="messages">
-      <div class="message bot">Hello! Ask me anything about our community.</div>
+        <div class="message bot">Hello! I am connected to the Clarety Knowledge Database. Ask me anything.</div>
     </div>
     <div class="chat-input-area">
-      <input type="text" id="userInput" placeholder="Type a question..." onkeypress="handleEnter(event)">
-      <button class="send" onclick="sendMessage()">Send</button>
+        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()">Send</button>
     </div>
-  </div>
+</div>
 
-  <script>
-    // Ensure this matches your Render URL exactly
-    const BACKEND_URL = "https://claretycoreapi.onrender.com/chat"; 
-
-    // Counter to ensure every message has a unique ID
-    let msgCounter = 0;
-
-    function toggleChat() {
-      const window = document.getElementById('chatWindow');
-      if (window.style.display === 'flex') {
-        window.style.display = 'none';
-      } else {
-        window.style.display = 'flex';
-        setTimeout(() => document.getElementById('userInput').focus(), 100);
-      }
-    }
-
-    function handleEnter(e) {
-      if (e.key === 'Enter') sendMessage();
-    }
+<script>
+    // ✅ THIS IS CONNECTED TO YOUR RENDER BACKEND
+    const API_URL = "https://claretycoreapi.onrender.com/chat";
 
     async function sendMessage() {
-      const input = document.getElementById('userInput');
-      const text = input.value.trim();
-      if (!text) return;
+        const inputField = document.getElementById("userInput");
+        const message = inputField.value.trim();
+        if (!message) return;
 
-      addMessage(text, 'user');
-      input.value = '';
+        // 1. Show User Message
+        addMessage(message, "user");
+        inputField.value = "";
 
-      const loadingId = addMessage("Thinking...", 'bot');
+        // 2. Show Loading...
+        const loadingId = addMessage("Searching...", "bot");
 
-      try {
-        const response = await fetch(BACKEND_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: text })
-        });
-
-        if (!response.ok) throw new Error("Network error");
-
-        const data = await response.json();
-        const botMsgDiv = document.getElementById(loadingId);
-        
-        if (botMsgDiv) {
-            // Convert newlines to breaks for cleaner list display
-            botMsgDiv.innerHTML = data.answer.replace(/\n/g, "<br>");
+        try {
+            // 3. Send to Backend
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: message })
+            });
             
-            if(data.links && data.links.length > 0) {
-              const linkList = document.createElement('div');
-              linkList.style.marginTop = "10px";
-              linkList.style.fontSize = "12px";
-              linkList.innerHTML = "<b>Sources:</b><br>";
-              data.links.forEach(l => {
-                  const a = document.createElement('a');
-                  a.href = l.url;
-                  a.target = "_blank";
-                  a.innerText = l.title;
-                  a.style.display = "block";
-                  a.style.color = "#426EAC";
-                  a.style.marginTop = "4px";
-                  linkList.appendChild(a);
-              });
-              botMsgDiv.appendChild(linkList);
-            }
-        }
+            const data = await response.json();
+            
+            // 4. Remove Loading and Show Answer
+            document.getElementById(loadingId).remove();
+            addMessage(data.answer, "bot");
 
-      } catch (error) {
-        console.error(error);
-        const botMsgDiv = document.getElementById(loadingId);
-        if (botMsgDiv) botMsgDiv.innerText = "I'm having trouble reaching the server. Please try again.";
-      }
+            // 5. Add Clickable Document Links
+            if (data.links && data.links.length > 0) {
+                const messagesDiv = document.getElementById("messages");
+                const lastMsg = messagesDiv.lastElementChild;
+                data.links.forEach(link => {
+                    const a = document.createElement("a");
+                    a.href = link.url;
+                    a.target = "_blank";
+                    a.className = "doc-link";
+                    a.innerText = "📄 " + link.title;
+                    lastMsg.appendChild(a);
+                });
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById(loadingId).innerText = "Sorry, I couldn't connect to the server.";
+        }
     }
 
     function addMessage(text, sender) {
-      msgCounter++; 
-      const msgs = document.getElementById('messages');
-      const div = document.createElement('div');
-      div.className = `message ${sender}`;
-      div.innerText = text;
-      div.id = `msg-${msgCounter}`; // Unique ID
-      msgs.appendChild(div);
-      msgs.scrollTop = msgs.scrollHeight;
-      return div.id;
+        const messagesDiv = document.getElementById("messages");
+        const div = document.createElement("div");
+        div.className = `message ${sender}`;
+        div.id = "msg-" + Date.now();
+        div.innerText = text;
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        return div.id;
     }
-  </script>
+
+    function handleEnter(e) {
+        if (e.key === "Enter") sendMessage();
+    }
+</script>
 
 </body>
 </html>
