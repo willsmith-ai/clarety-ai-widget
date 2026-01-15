@@ -119,8 +119,11 @@
   </div>
 
   <script>
-    // I added your actual Render URL here automatically:
+    // YOUR RENDER URL
     const BACKEND_URL = "https://claretycoreapi.onrender.com/chat"; 
+
+    // Counter to ensure every message has a unique ID
+    let msgCounter = 0;
 
     function toggleChat() {
       const window = document.getElementById('chatWindow');
@@ -141,14 +144,15 @@
       const text = input.value.trim();
       if (!text) return;
 
-      // 1. Show User Message
+      // 1. Show User Message (Blue)
       addMessage(text, 'user');
       input.value = '';
 
-      // 2. Show "Thinking..."
-      const loadingId = addMessage("Thinking...", 'bot');
+      // 2. Show "Thinking..." (Grey)
+      // We capture the ID of THIS specific bubble so we can update it later
+      const loadingBubbleId = addMessage("Thinking...", 'bot');
 
-      // 3. Send to Your Render Backend
+      // 3. Send to Backend
       try {
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
@@ -156,45 +160,53 @@
           body: JSON.stringify({ query: text })
         });
 
-        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.ok) throw new Error("Network error");
 
         const data = await response.json();
         
-        // 4. Update with real answer
-        const botMsgDiv = document.getElementById(loadingId);
-        botMsgDiv.innerText = data.answer;
-        
-        // Show links if any
-        if(data.links && data.links.length > 0) {
-          const linkList = document.createElement('div');
-          linkList.style.marginTop = "10px";
-          linkList.style.fontSize = "12px";
-          linkList.innerHTML = "<b>Sources:</b><br>";
-          data.links.forEach(l => {
-              const a = document.createElement('a');
-              a.href = l.url;
-              a.target = "_blank";
-              a.innerText = l.title;
-              a.style.display = "block";
-              a.style.color = "#426EAC";
-              linkList.appendChild(a);
-          });
-          botMsgDiv.appendChild(linkList);
+        // 4. Update the "Thinking..." bubble with the real answer
+        const botMsgDiv = document.getElementById(loadingBubbleId);
+        if (botMsgDiv) {
+            botMsgDiv.innerText = data.answer;
+            
+            // Add links if found
+            if(data.links && data.links.length > 0) {
+              const linkList = document.createElement('div');
+              linkList.style.marginTop = "10px";
+              linkList.style.fontSize = "12px";
+              linkList.innerHTML = "<b>Sources:</b><br>";
+              data.links.forEach(l => {
+                  const a = document.createElement('a');
+                  a.href = l.url;
+                  a.target = "_blank";
+                  a.innerText = l.title;
+                  a.style.display = "block";
+                  a.style.color = "#426EAC";
+                  a.style.marginTop = "4px";
+                  linkList.appendChild(a);
+              });
+              botMsgDiv.appendChild(linkList);
+            }
         }
 
       } catch (error) {
         console.error(error);
-        document.getElementById(loadingId).innerText = "I'm waking up! Please try again in 30 seconds.";
+        const botMsgDiv = document.getElementById(loadingBubbleId);
+        if (botMsgDiv) botMsgDiv.innerText = "I'm having trouble reaching the server. Please try again.";
       }
     }
 
     function addMessage(text, sender) {
+      msgCounter++; // Increment counter
       const msgs = document.getElementById('messages');
       const div = document.createElement('div');
       div.className = `message ${sender}`;
       div.innerText = text;
-      const id = 'msg-' + Date.now();
+      
+      // Assign a 100% unique ID
+      const id = `msg-${msgCounter}`;
       div.id = id;
+      
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
       return id;
