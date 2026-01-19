@@ -20,13 +20,13 @@
       z-index: 9999;
     }
 
-    /* 🔴 FIXED LAUNCHER STYLING */
+    /* Launcher bubble */
     #clarety-launcher {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      border: 3px solid #81A638; /* Clarety Green ring */
-      background: #ffffff;       /* White background for contrast */
+      border: 3px solid #81A638;
+      background: #ffffff;
       cursor: pointer;
       box-shadow:
         0 10px 22px rgba(0,0,0,.22),
@@ -38,8 +38,8 @@
     }
 
     #clarety-launcher img {
-      width: 99%;
-      height: 99%;
+      width: 92%;
+      height: 92%;
       object-fit: contain;
       display: block;
     }
@@ -72,27 +72,32 @@
     }
 
     #clarety-header strong {
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
     }
 
     #clarety-close {
       border: 0;
       background: rgba(255,255,255,0.2);
       color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 22px;
+      line-height: 40px;
     }
 
     #messages {
       flex: 1;
       padding: 14px;
       overflow-y: auto;
+      background: #fff;
     }
 
     .message {
-      max-width: 80%;
+      max-width: 85%;
       padding: 10px 14px;
       border-radius: 14px;
       margin-bottom: 10px;
@@ -118,24 +123,45 @@
       border-top: 1px solid #eee;
       display: flex;
       gap: 8px;
+      background: #fff;
     }
 
     .chat-input-area input {
       flex: 1;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-radius: 18px;
       border: 1px solid #ddd;
       outline: none;
+      font-size: 14px;
     }
 
     .chat-input-area button {
       background: #81A638;
       color: white;
       border: none;
-      padding: 0 16px;
+      padding: 0 18px;
       border-radius: 18px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    /* Sources UI (only shown when user asks) */
+    .source-toggle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #426EAC;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sources {
+      margin-top: 6px;
+      display: none;
+    }
+
+    .sources.open {
+      display: block;
     }
 
     .doc-link {
@@ -145,7 +171,7 @@
       color: #426EAC;
       text-decoration: none;
       background: rgba(66,110,172,0.12);
-      padding: 6px 10px;
+      padding: 8px 10px;
       border-radius: 10px;
     }
   </style>
@@ -154,30 +180,26 @@
 <body>
 
 <div id="clarety-chat">
-  <button id="clarety-launcher">
+  <button id="clarety-launcher" aria-label="Open Clarety Assistant" type="button">
     <img src="assets/ClaretyAIimage.png" alt="Clarety" />
   </button>
 
-  <div id="clarety-panel">
+  <div id="clarety-panel" role="dialog" aria-label="Clarety Assistant">
     <div id="clarety-header">
       <strong>Clarety Assistant</strong>
-      <button id="clarety-close">✕</button>
+      <button id="clarety-close" aria-label="Close chat" type="button">×</button>
     </div>
 
     <div id="messages">
       <div class="message bot">
-        Hi 👋 I’m the Clarety Assistant. I can help with Clarety questions and email templates.
+        Hi 👋 I’m the Clarety Assistant.
+        Ask a Clarety question, or say “draft an email…” and I’ll help.
       </div>
     </div>
 
     <div class="chat-input-area">
-      <input
-        id="userInput"
-        type="text"
-        placeholder="Type a message…"
-        autocomplete="off"
-      />
-      <button id="sendBtn">Send</button>
+      <input id="userInput" type="text" placeholder="Type a message…" autocomplete="off" />
+      <button id="sendBtn" type="button">Send</button>
     </div>
   </div>
 </div>
@@ -194,12 +216,75 @@
 
   launcher.onclick = () => panel.classList.toggle("open");
   closeBtn.onclick = () => panel.classList.remove("open");
-
-  inputField.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") sendMessage();
-  });
   sendBtn.onclick = sendMessage;
+  inputField.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
 
+  // ----------------- LOCAL “NATURAL” RESPONSES -----------------
+  function norm(text) {
+    return text.trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  function isGreeting(text) {
+    const t = norm(text);
+    return [
+      "hi","hello","hey","hiya","yo","sup",
+      "good morning","good afternoon","good evening"
+    ].includes(t);
+  }
+
+  function isHowAreYou(text) {
+    const t = norm(text);
+    return (
+      t === "how are you" ||
+      t === "how are you?" ||
+      t === "how's it going" ||
+      t === "hows it going" ||
+      t === "how are things" ||
+      t === "how are things?" ||
+      t === "how you going" ||
+      t === "how you going?"
+    );
+  }
+
+  function isThanks(text) {
+    const t = norm(text);
+    return (
+      t === "thanks" || t === "thank you" || t === "ty" ||
+      t === "thanks!" || t === "thank you!" || t === "thx"
+    );
+  }
+
+  function isTest(text) {
+    return norm(text) === "test";
+  }
+
+  function localReply(text) {
+    if (isHowAreYou(text)) {
+      return "I’m doing well — thanks for asking 😊\n\nHow can I help today? You can:\n• ask a Clarety question\n• ask me to draft/rewrite an email\n• describe a situation and I’ll suggest next steps";
+    }
+    if (isGreeting(text)) {
+      return "Hi 👋 How can I help today?\n\nTry: “Draft an email to supporters about…” or “How do I… in Clarety?”";
+    }
+    if (isThanks(text)) {
+      return "You’re welcome 😊 Anything else you’d like help with?";
+    }
+    if (isTest(text)) {
+      return "✅ I’m here and working.\n\nAsk a question or say “draft an email…”";
+    }
+    return null;
+  }
+
+  // Only show sources if the user explicitly asks
+  function userWantsSources(text) {
+    const t = norm(text);
+    const keywords = [
+      "sources", "source", "links", "link", "docs", "documents", "document",
+      "where did you get that", "show sources", "show links", "show docs", "citations", "cite"
+    ];
+    return keywords.some(k => t.includes(k));
+  }
+
+  // ----------------- MAIN SEND -----------------
   async function sendMessage() {
     if (isProcessing) return;
 
@@ -207,11 +292,18 @@
     if (!message) return;
 
     panel.classList.add("open");
-    isProcessing = true;
-
     addMessage(message, "user");
     inputField.value = "";
 
+    // 1) Handle small talk locally (NO backend call, NO "Thinking…", NO doc links)
+    const quick = localReply(message);
+    if (quick) {
+      addMessage(quick, "bot");
+      return;
+    }
+
+    // 2) Otherwise call backend
+    isProcessing = true;
     const loadingId = addMessage("Thinking…", "bot");
 
     try {
@@ -227,25 +319,41 @@
 
       const data = JSON.parse(raw);
 
+      // Remove "Thinking…"
       document.getElementById(loadingId)?.remove();
-      addMessage(data.answer || "No answer returned.", "bot");
 
-      if (data.links && data.links.length > 0) {
-        const lastMsg = document.getElementById("messages").lastElementChild;
+      // Show answer
+      const botMsgId = addMessage(data.answer || "No answer returned.", "bot");
+      const botMsgEl = document.getElementById(botMsgId);
+
+      // 3) Show sources ONLY if user asked
+      if (userWantsSources(message) && data.links && data.links.length > 0) {
+        const toggle = document.createElement("div");
+        toggle.className = "source-toggle";
+        toggle.innerText = `View sources (${data.links.length})`;
+
+        const sources = document.createElement("div");
+        sources.className = "sources";
+
         data.links.forEach(link => {
           const a = document.createElement("a");
           a.href = link.url;
           a.target = "_blank";
+          a.rel = "noopener noreferrer";
           a.className = "doc-link";
           a.innerText = "📄 " + link.title;
-          lastMsg.appendChild(a);
+          sources.appendChild(a);
         });
+
+        toggle.onclick = () => sources.classList.toggle("open");
+        botMsgEl.appendChild(toggle);
+        botMsgEl.appendChild(sources);
       }
 
     } catch (err) {
       console.error(err);
       const loadingMsg = document.getElementById(loadingId);
-      if (loadingMsg) loadingMsg.innerText = "Sorry — I couldn't reach the server. Please try again.";
+      if (loadingMsg) loadingMsg.innerText = "Sorry — I couldn’t reach the server. Please try again.";
     } finally {
       isProcessing = false;
     }
