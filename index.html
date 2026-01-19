@@ -20,14 +20,17 @@
       z-index: 9999;
     }
 
+    /* 🔴 FIXED LAUNCHER STYLING */
     #clarety-launcher {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      border: none;
-      background: #81A638;
+      border: 3px solid #81A638; /* Clarety Green ring */
+      background: #ffffff;       /* White background for contrast */
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+      box-shadow:
+        0 10px 22px rgba(0,0,0,.22),
+        0 0 0 6px rgba(129,166,56,.15);
       display: grid;
       place-items: center;
       padding: 0;
@@ -35,10 +38,9 @@
     }
 
     #clarety-launcher img {
-      width: 100%;
-      height: 100%;
+      width: 70%;
+      height: 70%;
       object-fit: contain;
-      border-radius: 50%;
       display: block;
     }
 
@@ -164,7 +166,7 @@
 
     <div id="messages">
       <div class="message bot">
-        Hi 👋 I’m the Clarety Assistant. I can answer Clarety questions and help draft emails/templates.
+        Hi 👋 I’m the Clarety Assistant. I can help with Clarety questions and email templates.
       </div>
     </div>
 
@@ -198,82 +200,6 @@
   });
   sendBtn.onclick = sendMessage;
 
-  // ---------- SMART LOCAL HANDLERS ----------
-  function isGreeting(text) {
-    const t = text.trim().toLowerCase();
-    const patterns = [
-      /^hi$/, /^hello$/, /^hey$/, /^yo$/, /^hiya$/,
-      /^good (morning|afternoon|evening)$/,
-      /^how are you\??$/, /^how's it going\??$/, /^hows it going\??$/,
-      /^what's up\??$/, /^whats up\??$/, /^are you there\??$/,
-      /^test$/
-    ];
-    return patterns.some(r => r.test(t));
-  }
-
-  function greetingReply(userText) {
-    const t = userText.trim().toLowerCase();
-    if (t.includes("how are you") || t.includes("how's it going") || t.includes("hows it going")) {
-      return "I’m doing well — thanks for asking 😊\n\nHow can I help you today? (Ask a Clarety question, or say “draft an email…”).";
-    }
-    if (t === "test") {
-      return "✅ Yep — I’m here.\n\nTry: “Draft a donor email about…” or “How does X work in Clarety?”";
-    }
-    return "Hi 👋 Great to see you.\n\nI can help with Clarety questions or writing emails/templates. What are we working on?";
-  }
-
-  // Detect email/template intents
-  function isEmailRequest(text) {
-    const t = text.toLowerCase();
-    const keywords = [
-      "draft an email", "write an email", "email template", "template email",
-      "rewrite this email", "rewrite my email", "respond to this email",
-      "follow up email", "follow-up email", "subject line", "appeal email",
-      "donor email", "supporter email", "thank you email", "thank-you email"
-    ];
-    return keywords.some(k => t.includes(k));
-  }
-
-  // Detect "general discussion / help me think" intents
-  function isDiscussion(text) {
-    const t = text.toLowerCase();
-    const keywords = [
-      "help me", "can you help", "i'm not sure", "we're thinking", "we are thinking",
-      "what do you think", "brainstorm", "ideas", "strategy", "plan", "approach",
-      "how should we", "what should we do", "best way to"
-    ];
-    return keywords.some(k => t.includes(k));
-  }
-
-  // We keep a tiny “email mode” state so we can ask ONE quick question
-  let pendingEmailClarifier = null;
-
-  function askEmailClarifier() {
-    pendingEmailClarifier = true;
-    return "Sure — who is this email to, and what tone do you want?\n\nExamples:\n- “Supporters, warm and grateful”\n- “Client, professional and brief”\n- “Internal staff, direct and clear”";
-  }
-
-  function buildEmailPrompt(originalRequest, clarifierAnswer) {
-    return (
-`You are the Clarety fundraising assistant and copywriter.
-
-Task: Draft an email based on the request below.
-Use Clarety terminology and tone. If exact wording isn’t in Clarety docs, draft using best practice.
-
-Output format:
-- 3 subject line options
-- Email body
-- Optional PS
-- Placeholders like {{FirstName}} where needed
-
-User request:
-${originalRequest}
-
-Audience/tone:
-${clarifierAnswer}`
-    );
-  }
-
   async function sendMessage() {
     if (isProcessing) return;
 
@@ -281,52 +207,11 @@ ${clarifierAnswer}`
     if (!message) return;
 
     panel.classList.add("open");
+    isProcessing = true;
+
     addMessage(message, "user");
     inputField.value = "";
 
-    // If we previously asked "who is it to / tone", this message is the answer
-    if (pendingEmailClarifier) {
-      pendingEmailClarifier = null;
-
-      // The email request is the second-last user message; we’ll store it in a simple way:
-      const allMsgs = Array.from(document.querySelectorAll("#messages .message.user")).map(m => m.innerText);
-      const originalRequest = allMsgs.length >= 2 ? allMsgs[allMsgs.length - 2] : "Draft an email";
-
-      // Send a structured prompt to backend for better output
-      await sendToBackend(buildEmailPrompt(originalRequest, message));
-      return;
-    }
-
-    // Greeting handled locally (no backend call)
-    if (isGreeting(message)) {
-      addMessage(greetingReply(message), "bot");
-      return;
-    }
-
-    // Email/template: ask ONE clarifying question locally (then we call backend)
-    if (isEmailRequest(message)) {
-      addMessage(askEmailClarifier(), "bot");
-      return;
-    }
-
-    // General discussion: slightly “wrap” the prompt so Gemini responds helpfully
-    if (isDiscussion(message)) {
-      const wrapped = 
-`Help me think this through and propose a clear next step.
-Be practical, Clarety-friendly, and ask at most ONE clarifying question if needed.
-
-User message:
-${message}`;
-      await sendToBackend(wrapped);
-      return;
-    }
-
-    // Otherwise: normal backend call
-    await sendToBackend(message);
-  }
-
-  async function sendToBackend(textToSend) {
-    isProcessing = true;
     const loadingId = addMessage("Thinking…", "bot");
 
     try {
@@ -334,7 +219,7 @@ ${message}`;
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: textToSend })
+        body: JSON.stringify({ query: message })
       });
 
       const raw = await res.text();
