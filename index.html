@@ -30,13 +30,17 @@
       box-shadow: 0 8px 20px rgba(0,0,0,.25);
       display: grid;
       place-items: center;
-      padding: 0;
+      padding: 0; /* IMPORTANT: remove padding */
+      overflow: hidden;
     }
 
+    /* LOGO FILLS THE ENTIRE BUBBLE */
     #clarety-launcher img {
-      width: 28px;
-      height: 28px;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
+      border-radius: 50%;
+      display: block;
     }
 
     #clarety-panel {
@@ -213,17 +217,12 @@
       const res = await fetch(API_URL, {
         method: "POST",
         mode: "cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: message })
       });
 
       const raw = await res.text();
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${raw}`);
-      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${raw}`);
 
       const data = JSON.parse(raw);
 
@@ -245,9 +244,7 @@
     } catch (err) {
       console.error(err);
       const loadingMsg = document.getElementById(loadingId);
-      if (loadingMsg) {
-        loadingMsg.innerText = "Error: " + err.message;
-      }
+      if (loadingMsg) loadingMsg.innerText = "Error: " + err.message;
     } finally {
       isProcessing = false;
     }
