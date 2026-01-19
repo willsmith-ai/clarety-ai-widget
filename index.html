@@ -3,15 +3,256 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarety Core AI</title>
+  <title>Clarety Care - Mock</title>
 
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
+    :root{
+      --clarety-green:#81A638;
+      --clarety-blue:#426EAC;
+      --clarety-light-blue:#6FAAC5;   /* header bar feel */
+      --page-bg:#ffffff;
+      --soft-bg:#E9F3F7;
+      --card-bg:#EAF4F8;
+      --text:#0f172a;
+      --muted:#475569;
+      --shadow: 0 18px 45px rgba(2, 6, 23, 0.12);
+      --shadow-soft: 0 12px 30px rgba(0,0,0,.18);
+      --ring: 0 0 0 6px rgba(129,166,56,.15);
+      --radius:14px;
     }
 
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:var(--page-bg);
+      color:var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* ======= Top app chrome (mimic) ======= */
+    .top-strip{
+      background:#d6e6c4;
+      border-bottom: 1px solid rgba(2,6,23,0.08);
+      padding: 10px 18px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      overflow:auto;
+      white-space:nowrap;
+    }
+    .top-strip .tab{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#3a5b22;
+      font-weight:700;
+      font-size:14px;
+      padding:8px 12px;
+      border-radius:10px;
+      background: rgba(255,255,255,0.35);
+    }
+    .top-strip .tab.active{
+      background: rgba(255,255,255,0.9);
+      color:#0f172a;
+    }
+    .top-strip .right{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(2,6,23,0.08);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:#0f172a;
+    }
+
+    .section-tabs{
+      background: var(--clarety-light-blue);
+      padding: 12px 18px;
+      display:flex;
+      gap:22px;
+      align-items:center;
+      color:#fff;
+      font-weight:700;
+    }
+    .section-tabs a{
+      color:#fff;
+      text-decoration:none;
+      opacity:0.9;
+      font-size:14px;
+    }
+    .section-tabs a.active{
+      opacity:1;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      text-decoration-thickness: 2px;
+    }
+
+    /* ======= Page content ======= */
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 26px 18px 80px;
+    }
+
+    .hero{
+      background: #E7F2F6;
+      border-radius: 0;
+      padding: 36px 0 26px;
+      text-align:center;
+    }
+    .hero h1{
+      margin:0 0 16px;
+      font-size: 44px;
+      color: #5A9AB5;
+      letter-spacing: 0.2px;
+      font-weight: 800;
+    }
+    .search-wrap{
+      display:flex;
+      justify-content:center;
+      padding-bottom: 18px;
+    }
+    .search{
+      width:min(520px, 92vw);
+      display:flex;
+      border: 1px solid rgba(2,6,23,0.18);
+      border-radius: 3px;
+      background:#fff;
+      overflow:hidden;
+    }
+    .search input{
+      border:0;
+      outline:none;
+      flex:1;
+      padding: 14px 14px;
+      font-size:16px;
+    }
+    .search button{
+      width: 54px;
+      border:0;
+      cursor:pointer;
+      background:#fff;
+      border-left: 1px solid rgba(2,6,23,0.12);
+      display:grid;
+      place-items:center;
+    }
+
+    h2.section-title{
+      text-align:center;
+      font-size: 44px;
+      margin: 44px 0 18px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      color:#0b1220;
+    }
+
+    .whats-new{
+      display:grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 40px;
+      align-items:center;
+      padding: 10px 0 30px;
+    }
+    .mock-laptop{
+      width: 100%;
+      aspect-ratio: 16/10;
+      border-radius: 16px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)),
+        radial-gradient(circle at 30% 30%, rgba(66,110,172,0.20), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(129,166,56,0.18), transparent 55%),
+        #f1f5f9;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(2,6,23,0.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .mock-laptop:before{
+      content:"";
+      position:absolute;
+      inset: 14px 18px 18px 18px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid rgba(2,6,23,0.10);
+    }
+    .mock-laptop:after{
+      content:"(Replace with your real dashboard screenshot image)";
+      position:absolute;
+      left: 24px;
+      right: 24px;
+      top: 24px;
+      font-size: 13px;
+      color: rgba(2,6,23,0.45);
+    }
+
+    .whats-new h3{
+      margin:0 0 12px;
+      font-size: 24px;
+      font-weight: 900;
+      color:#0b1220;
+    }
+    .whats-new p{
+      margin: 0 0 14px;
+      color: rgba(2,6,23,0.70);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .categories{
+      padding: 10px 0 40px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 30px;
+      margin-top: 18px;
+    }
+    .cat{
+      background: var(--card-bg);
+      border-radius: 2px;
+      padding: 28px 18px 22px;
+      text-align:center;
+      border: 1px solid rgba(2,6,23,0.06);
+    }
+    .icon{
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 14px;
+      display:grid;
+      place-items:center;
+      color: #5AA5C7;
+    }
+    .cat .label{
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 900;
+      color:#0b1220;
+    }
+    .footer-space{
+      height: 40px;
+    }
+
+    /* responsive */
+    @media (max-width: 920px){
+      .whats-new{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero h1{ font-size: 34px; }
+      h2.section-title{ font-size: 34px; }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* ================= Clarety Popup Widget ================= */
     #clarety-chat {
       position: fixed;
       bottom: 20px;
@@ -23,14 +264,13 @@
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      border: 3px solid #81A638;
-      background: #fff;
+      border: 3px solid var(--clarety-green);
+      background: #ffffff;
       cursor: pointer;
-      box-shadow:
-        0 10px 22px rgba(0,0,0,.22),
-        0 0 0 6px rgba(129,166,56,.15);
+      box-shadow: 0 10px 22px rgba(0,0,0,.22), var(--ring);
       display: grid;
       place-items: center;
+      padding: 0;
       overflow: hidden;
     }
 
@@ -38,13 +278,14 @@
       width: 92%;
       height: 92%;
       object-fit: contain;
+      display: block;
     }
 
     #clarety-panel {
       display: none;
       width: 360px;
       height: 520px;
-      background: #fff;
+      background: white;
       border-radius: 14px;
       box-shadow: 0 12px 30px rgba(0,0,0,.25);
       position: absolute;
@@ -54,16 +295,17 @@
       flex-direction: column;
     }
 
-    #clarety-panel.open { display: flex; }
+    #clarety-panel.open { display:flex; }
 
     #clarety-header {
-      background: #426EAC;
+      background: var(--clarety-blue);
       color: #fff;
       padding: 14px;
-      display: flex;
+      display:flex;
       justify-content: space-between;
-      align-items: center;
-      font-weight: 800;
+      align-items:center;
+      font-weight: 900;
+      letter-spacing: 0.2px;
     }
 
     #clarety-close {
@@ -75,12 +317,14 @@
       border-radius: 10px;
       cursor: pointer;
       font-size: 20px;
+      line-height: 36px;
     }
 
     #messages {
       flex: 1;
       padding: 14px;
       overflow-y: auto;
+      background: #fff;
     }
 
     .message {
@@ -91,10 +335,11 @@
       font-size: 14px;
       line-height: 1.35;
       white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .message.user {
-      background: #426EAC;
+      background: var(--clarety-blue);
       color: #fff;
       margin-left: auto;
     }
@@ -107,149 +352,341 @@
     .chat-input-area {
       padding: 12px;
       border-top: 1px solid #eee;
-      display: flex;
+      display:flex;
       gap: 8px;
+      background:#fff;
     }
 
     .chat-input-area input {
-      flex: 1;
-      padding: 12px;
+      flex:1;
+      padding: 12px 14px;
       border-radius: 18px;
       border: 1px solid #ddd;
-      outline: none;
+      outline:none;
+      font-size: 14px;
     }
 
     .chat-input-area button {
-      background: #81A638;
+      background: var(--clarety-green);
       color: #fff;
-      border: none;
+      border: 0;
       padding: 0 18px;
       border-radius: 18px;
-      font-weight: 800;
       cursor: pointer;
+      font-weight: 900;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-<div id="clarety-chat">
-  <button id="clarety-launcher">
-    <img src="assets/ClaretyAIimage.png" alt="Clarety" />
-  </button>
+  <!-- Top navigation mimic -->
+  <div class="top-strip">
+    <div class="tab">Content</div>
+    <div class="tab">Contacts</div>
+    <div class="tab">Commerce</div>
+    <div class="tab">Connect</div>
+    <div class="tab">Cases</div>
+    <div class="tab">Context</div>
+    <div class="tab">Company</div>
+    <div class="tab active">❤ Care</div>
 
-  <div id="clarety-panel">
-    <div id="clarety-header">
-      Clarety Assistant
-      <button id="clarety-close">×</button>
+    <div class="right">
+      <div class="pill">Control</div>
     </div>
+  </div>
 
-    <div id="messages">
-      <div class="message bot">
-        Hi 👋 I’m the Clarety Assistant.  
-        I can answer Clarety questions, help draft emails, or talk through ideas.
+  <div class="section-tabs">
+    <a class="active" href="#">Topics</a>
+    <a href="#">Monitoring</a>
+    <a href="#">Maintenance</a>
+  </div>
+
+  <!-- Hero/search area -->
+  <div class="hero">
+    <div class="container" style="padding-top:0; padding-bottom:0;">
+      <h1>Search Clarety Care</h1>
+      <div class="search-wrap">
+        <div class="search">
+          <input placeholder="Search Topics" />
+          <button aria-label="Search">
+            <!-- magnifier -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="#0b1220" stroke-width="2"/>
+              <path d="M16.5 16.5 21 21" stroke="#0b1220" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">What's New</h2>
+
+    <div class="whats-new">
+      <div class="mock-laptop" aria-label="Dashboard preview mock"></div>
+
+      <div>
+        <h3>Welcome to the New Year!</h3>
+        <p>
+          As we step into the new year, we’d like to take a moment to thank you for your continued support.
+          The year ahead brings fresh opportunities, new goals, and plenty to look forward to.
+        </p>
+        <p>
+          Our team is back and ready to get started after the holiday break, and we’re looking forward to another
+          year of collaboration and progress.
+        </p>
+        <p>
+          Here’s to a positive and successful year ahead. We wish you all the very best for the year to come!
+        </p>
       </div>
     </div>
 
-    <div class="chat-input-area">
-      <input id="userInput" placeholder="Type a message…" />
-      <button id="sendBtn">Send</button>
+    <h2 class="section-title">Browse Categories</h2>
+
+    <div class="categories">
+      <div class="grid">
+        <!-- Row 1 -->
+        <div class="cat">
+          <div class="icon">
+            <!-- sparkle icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2l1.2 4.2L17.4 7.4 13.2 8.6 12 12.8 10.8 8.6 6.6 7.4 10.8 6.2 12 2Z" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M19 12l.8 2.8 2.8.8-2.8.8L19 19l-.8-2.6-2.6-.8 2.6-.8L19 12Z" stroke="#5AA5C7" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="label">Latest News</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- cloud icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7.5 19h9.3a4.2 4.2 0 0 0 .1-8.4A5.7 5.7 0 0 0 6.2 9.8 3.7 3.7 0 0 0 7.5 19Z" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="label">Welcome to Clarety</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- video icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="6" width="18" height="12" rx="2.5" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M11 10l4 2-4 2v-4Z" fill="#5AA5C7"/>
+            </svg>
+          </div>
+          <div class="label">Video Tutorials</div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="cat">
+          <div class="icon">
+            <!-- database icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3Z" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" stroke="#5AA5C7" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="label">CRM</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- devices icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="5" width="13" height="10" rx="2" stroke="#5AA5C7" stroke-width="1.8"/>
+              <rect x="17" y="9" width="4" height="8" rx="1.2" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M7 19h5" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="label">Website</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- thumbs icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M10 11V6.8c0-1.4 1-2.6 2.3-2.8l.2 0-.7 4h5.2c1.3 0 2.3 1.1 2.1 2.4l-1 6.2c-.2 1-1 1.7-2 1.7H10" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 11h2v9H6c-.6 0-1-.4-1-1v-7c0-.6.4-1 1-1Z" stroke="#5AA5C7" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="label">Digital Marketing</div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="cat">
+          <div class="icon">
+            <!-- calendar icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="4" y="6" width="16" height="14" rx="2" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M8 3v4M16 3v4M4 10h16" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M8 14h3M8 17h5" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="label">Email & SMS Marketing</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- mail icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="4" y="7" width="16" height="12" rx="2" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M5 8l7 6 7-6" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="label">Direct Mail</div>
+        </div>
+
+        <div class="cat">
+          <div class="icon">
+            <!-- money icon -->
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="10" r="5" stroke="#5AA5C7" stroke-width="1.8"/>
+              <path d="M12 7.5v5" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M10.5 10h3" stroke="#5AA5C7" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M6 21h12a2 2 0 0 0 2-2v-1H4v1a2 2 0 0 0 2 2Z" stroke="#5AA5C7" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="label">Giving</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-space"></div>
+  </div>
+
+  <!-- ================= Clarety Assistant Widget ================= -->
+  <div id="clarety-chat">
+    <button id="clarety-launcher" aria-label="Open Clarety Assistant" type="button">
+      <img src="assets/ClaretyAIimage.png" alt="Clarety" />
+    </button>
+
+    <div id="clarety-panel" role="dialog" aria-label="Clarety Assistant">
+      <div id="clarety-header">
+        Clarety Assistant
+        <button id="clarety-close" aria-label="Close chat" type="button">×</button>
+      </div>
+
+      <div id="messages">
+        <div class="message bot">
+          Hi 👋 I’m the Clarety Assistant.
+          Ask a Clarety question, or say “draft an email…” and I’ll help.
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <input id="userInput" type="text" placeholder="Type a message…" autocomplete="off" />
+        <button id="sendBtn" type="button">Send</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const API_URL = "https://claretycoreapi.onrender.com/chat";
-  let isProcessing = false;
+  <script>
+    // ===== Widget logic (simple + stable) =====
+    const API_URL = "https://claretycoreapi.onrender.com/chat";
+    let isProcessing = false;
 
-  const panel = document.getElementById("clarety-panel");
-  document.getElementById("clarety-launcher").onclick = () => panel.classList.toggle("open");
-  document.getElementById("clarety-close").onclick = () => panel.classList.remove("open");
-  document.getElementById("sendBtn").onclick = sendMessage;
-  document.getElementById("userInput").addEventListener("keypress", e => e.key === "Enter" && sendMessage());
+    const panel = document.getElementById("clarety-panel");
+    const launcher = document.getElementById("clarety-launcher");
+    const closeBtn = document.getElementById("clarety-close");
+    const sendBtn = document.getElementById("sendBtn");
+    const inputField = document.getElementById("userInput");
 
-  function addMessage(text, sender) {
-    const div = document.createElement("div");
-    div.className = `message ${sender}`;
-    div.innerText = text;
-    document.getElementById("messages").appendChild(div);
-    div.scrollIntoView({ behavior: "smooth" });
-  }
+    launcher.onclick = () => panel.classList.toggle("open");
+    closeBtn.onclick = () => panel.classList.remove("open");
+    sendBtn.onclick = sendMessage;
+    inputField.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
 
-  function isRagFailure(text = "") {
-    const t = text.toLowerCase();
-    return (
-      t.includes("no documents found") ||
-      t.includes("cannot assist") ||
-      t.includes("do not contain information") ||
-      t.includes("try a more specific") ||
-      t.trim().length < 20
-    );
-  }
+    function addMessage(text, sender) {
+      const messagesDiv = document.getElementById("messages");
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerText = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return div;
+    }
 
-  function generativeFallback(userMessage) {
-    return (
-`I can still help 👍
+    function norm(t){ return t.trim().toLowerCase().replace(/\s+/g," "); }
+    function localReply(userText){
+      const t = norm(userText);
+      if (["hi","hello","hey","hiya","good morning","good afternoon","good evening"].includes(t)) {
+        return "Hi 👋 How can I help today?\n\nTry: “How do I… in Clarety?” or “Draft an email about…”";
+      }
+      if (t === "how are you" || t === "how are you?" || t === "how's it going" || t === "hows it going") {
+        return "I’m doing well — thanks 😊\n\nWhat can I help you with today?";
+      }
+      if (t === "thanks" || t === "thank you" || t === "thx" || t === "ty") {
+        return "You’re welcome 😊 Anything else?";
+      }
+      return null;
+    }
 
-It sounds like you’re looking for guidance rather than a specific Clarety document.
+    function isRagFailure(answer){
+      const a = (answer || "").toLowerCase();
+      return (
+        a.includes("no documents found") ||
+        a.includes("cannot assist") ||
+        a.includes("do not contain information") ||
+        a.includes("try a more specific") ||
+        a.trim().length < 20
+      );
+    }
 
-Let’s start with one question:
-What are you trying to achieve?
+    function fallbackAnswer(userText){
+      return "I can still help 👍\n\nIt looks like this isn’t a Clarety-docs question.\nTell me what you’re trying to achieve and I’ll suggest the best next steps.";
+    }
 
-For example:
-• website or design advice
-• planning or strategy
-• drafting or rewriting content
-• understanding a process
+    async function sendMessage(){
+      if (isProcessing) return;
 
-Tell me a bit more and I’ll help from there.`
-    );
-  }
+      const message = inputField.value.trim();
+      if (!message) return;
 
-  async function sendMessage() {
-    if (isProcessing) return;
+      panel.classList.add("open");
+      addMessage(message, "user");
+      inputField.value = "";
 
-    const input = document.getElementById("userInput");
-    const userText = input.value.trim();
-    if (!userText) return;
-
-    panel.classList.add("open");
-    addMessage(userText, "user");
-    input.value = "";
-
-    isProcessing = true;
-    addMessage("Thinking…", "bot");
-
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userText })
-      });
-
-      const data = await res.json();
-      const botAnswer = data?.answer || "";
-
-      // Remove last "Thinking…"
-      const msgs = document.querySelectorAll(".message.bot");
-      msgs[msgs.length - 1]?.remove();
-
-      if (isRagFailure(botAnswer)) {
-        addMessage(generativeFallback(userText), "bot");
-      } else {
-        addMessage(botAnswer, "bot");
+      const quick = localReply(message);
+      if (quick) {
+        addMessage(quick, "bot");
+        return;
       }
 
-    } catch {
-      addMessage(
-        "I had trouble reaching the server — but I can still help. What are you trying to do?",
-        "bot"
-      );
-    } finally {
-      isProcessing = false;
-    }
-  }
-</script>
+      isProcessing = true;
+      const thinkingEl = addMessage("Thinking…", "bot");
 
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: message })
+        });
+
+        const raw = await res.text();
+        if (!res.ok) throw new Error(raw);
+
+        const data = JSON.parse(raw);
+        thinkingEl.remove();
+
+        const answer = data?.answer || "";
+        if (isRagFailure(answer)) {
+          addMessage(fallbackAnswer(message), "bot");
+        } else {
+          addMessage(answer, "bot");
+        }
+
+      } catch (e) {
+        thinkingEl.innerText = "Sorry — I couldn’t reach the server. Please try again.";
+      } finally {
+        isProcessing = false;
+      }
+    }
+  </script>
 </body>
 </html>
