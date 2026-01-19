@@ -6,7 +6,6 @@
   <title>Clarety Core AI</title>
 
   <style>
-    /* Basic page styling (kept minimal so it doesn't fight the widget) */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #f4f4f9;
@@ -19,7 +18,6 @@
       bottom: 20px;
       right: 20px;
       z-index: 9999;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     #clarety-launcher {
@@ -27,7 +25,7 @@
       height: 56px;
       border-radius: 50%;
       border: none;
-      background: #81A638; /* Clarety Green */
+      background: #81A638;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0,0,0,.25);
       display: grid;
@@ -39,7 +37,6 @@
       width: 28px;
       height: 28px;
       object-fit: contain;
-      display: block;
     }
 
     #clarety-panel {
@@ -54,7 +51,6 @@
       right: 0;
       overflow: hidden;
       flex-direction: column;
-      border: 1px solid rgba(0,0,0,0.06);
     }
 
     #clarety-panel.open {
@@ -62,63 +58,32 @@
     }
 
     #clarety-header {
-      background: #426EAC; /* Clarety Blue */
+      background: #426EAC;
       color: white;
       padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
     }
 
-    #clarety-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    #clarety-header-logo {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      background: rgba(255,255,255,0.92);
-      border-radius: 8px;
-      padding: 4px;
-    }
-
-    #clarety-title {
-      font-weight: 700;
+    #clarety-header strong {
       font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     #clarety-close {
       border: 0;
-      background: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.2);
       color: white;
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
-      line-height: 34px;
-    }
-
-    #clarety-close:hover {
-      background: rgba(255,255,255,0.28);
     }
 
     #messages {
       flex: 1;
       padding: 14px;
       overflow-y: auto;
-      background:
-        radial-gradient(circle at 12% 10%, rgba(232,185,9,.10), transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(221,118,28,.10), transparent 42%),
-        #fff;
     }
 
     .message {
@@ -128,21 +93,19 @@
       margin-bottom: 10px;
       font-size: 14px;
       line-height: 1.35;
-      word-break: break-word;
       white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .message.user {
-      background: #426EAC; /* Clarety Blue */
+      background: #426EAC;
       color: white;
       margin-left: auto;
-      border-bottom-right-radius: 6px;
     }
 
     .message.bot {
       background: #e9ecef;
-      color: #0f172a;
-      border-bottom-left-radius: 6px;
+      color: #111;
     }
 
     .chat-input-area {
@@ -150,7 +113,6 @@
       border-top: 1px solid #eee;
       display: flex;
       gap: 8px;
-      background: #fff;
     }
 
     .chat-input-area input {
@@ -159,11 +121,10 @@
       border-radius: 18px;
       border: 1px solid #ddd;
       outline: none;
-      font-size: 14px;
     }
 
     .chat-input-area button {
-      background: #81A638; /* Clarety Green */
+      background: #81A638;
       color: white;
       border: none;
       padding: 0 16px;
@@ -172,143 +133,137 @@
       font-weight: 700;
     }
 
-    .chat-input-area button:hover {
-      filter: brightness(0.95);
-    }
-
     .doc-link {
       display: block;
       margin-top: 6px;
       font-size: 13px;
       color: #426EAC;
       text-decoration: none;
-      background: rgba(66,110,172,0.10);
+      background: rgba(66,110,172,0.12);
       padding: 6px 10px;
       border-radius: 10px;
-    }
-
-    .doc-link:hover {
-      background: rgba(66,110,172,0.16);
     }
   </style>
 </head>
 
 <body>
-  <!-- Bottom-right Clarety Chat Widget -->
-  <div id="clarety-chat">
-    <button id="clarety-launcher" aria-label="Open Clarety Assistant" type="button">
-      <!-- IMPORTANT: ensure this file exists in /assets with EXACT casing -->
-      <img src="assets/ClaretyAIimage.png" alt="Clarety" />
-    </button>
 
-    <div id="clarety-panel" role="dialog" aria-label="Clarety Assistant">
-      <div id="clarety-header">
-        <div id="clarety-brand">
-          <img id="clarety-header-logo" src="assets/ClaretyAIimage.png" alt="Clarety" />
-          <div id="clarety-title">Clarety Assistant</div>
-        </div>
-        <button id="clarety-close" aria-label="Close chat" type="button">✕</button>
-      </div>
+<div id="clarety-chat">
+  <button id="clarety-launcher">
+    <img src="assets/ClaretyAIimage.png" alt="Clarety" />
+  </button>
 
-      <div id="messages">
-        <div class="message bot">Hi 👋 I’m the Clarety Assistant. How can I help today?</div>
-      </div>
+  <div id="clarety-panel">
+    <div id="clarety-header">
+      <strong>Clarety Assistant</strong>
+      <button id="clarety-close">✕</button>
+    </div>
 
-      <div class="chat-input-area">
-        <input
-          type="text"
-          id="userInput"
-          placeholder="Type a message…"
-          autocomplete="off"
-        />
-        <button id="sendBtn" type="button">Send</button>
+    <div id="messages">
+      <div class="message bot">
+        Hi 👋 I’m the Clarety Assistant. How can I help today?
       </div>
     </div>
+
+    <div class="chat-input-area">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Type a message…"
+        autocomplete="off"
+      />
+      <button id="sendBtn">Send</button>
+    </div>
   </div>
+</div>
 
-  <script>
-    // Your Render chat endpoint
-    const API_URL = "https://claretycoreapi.onrender.com/chat";
-    let isProcessing = false;
+<script>
+  const API_URL = "https://claretycoreapi.onrender.com/chat";
+  let isProcessing = false;
 
-    const launcher = document.getElementById("clarety-launcher");
-    const panel = document.getElementById("clarety-panel");
-    const closeBtn = document.getElementById("clarety-close");
-    const sendBtn = document.getElementById("sendBtn");
-    const inputField = document.getElementById("userInput");
+  const launcher = document.getElementById("clarety-launcher");
+  const panel = document.getElementById("clarety-panel");
+  const closeBtn = document.getElementById("clarety-close");
+  const sendBtn = document.getElementById("sendBtn");
+  const inputField = document.getElementById("userInput");
 
-    launcher.onclick = () => panel.classList.toggle("open");
-    closeBtn.onclick = () => panel.classList.remove("open");
+  launcher.onclick = () => panel.classList.toggle("open");
+  closeBtn.onclick = () => panel.classList.remove("open");
 
-    // Enter-to-send (only when the panel is open)
-    inputField.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") sendMessage();
-    });
+  inputField.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+  sendBtn.onclick = sendMessage;
 
-    sendBtn.addEventListener("click", sendMessage);
+  async function sendMessage() {
+    if (isProcessing) return;
 
-    async function sendMessage() {
-      if (isProcessing) return;
+    const message = inputField.value.trim();
+    if (!message) return;
 
-      const message = inputField.value.trim();
-      if (!message) return;
+    panel.classList.add("open");
+    isProcessing = true;
 
-      // Auto-open panel if user somehow types before opening
-      panel.classList.add("open");
+    addMessage(message, "user");
+    inputField.value = "";
 
-      isProcessing = true;
-      addMessage(message, "user");
-      inputField.value = "";
+    const loadingId = addMessage("Thinking…", "bot");
 
-      const loadingId = addMessage("Thinking…", "bot");
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query: message })
+      });
 
-      try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: message })
-        });
+      const raw = await res.text();
 
-        const data = await response.json();
-
-        document.getElementById(loadingId)?.remove();
-
-        addMessage(data.answer || "Sorry — I didn’t get an answer back.", "bot");
-
-        if (data.links && data.links.length > 0) {
-          const messagesDiv = document.getElementById("messages");
-          const lastMsg = messagesDiv.lastElementChild;
-
-          data.links.forEach(link => {
-            const a = document.createElement("a");
-            a.href = link.url;
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
-            a.className = "doc-link";
-            a.innerText = "📄 " + link.title;
-            lastMsg.appendChild(a);
-          });
-        }
-
-      } catch (err) {
-        console.error("Chat error:", err);
-        const loadingMsg = document.getElementById(loadingId);
-        if (loadingMsg) loadingMsg.innerText = "Sorry — I couldn't connect to the server.";
-      } finally {
-        isProcessing = false;
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${raw}`);
       }
-    }
 
-    function addMessage(text, sender) {
-      const messagesDiv = document.getElementById("messages");
-      const div = document.createElement("div");
-      div.className = `message ${sender}`;
-      div.id = "msg-" + Date.now();
-      div.innerText = text;
-      messagesDiv.appendChild(div);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      return div.id;
+      const data = JSON.parse(raw);
+
+      document.getElementById(loadingId)?.remove();
+      addMessage(data.answer || "No answer returned.", "bot");
+
+      if (data.links && data.links.length > 0) {
+        const lastMsg = document.getElementById("messages").lastElementChild;
+        data.links.forEach(link => {
+          const a = document.createElement("a");
+          a.href = link.url;
+          a.target = "_blank";
+          a.className = "doc-link";
+          a.innerText = "📄 " + link.title;
+          lastMsg.appendChild(a);
+        });
+      }
+
+    } catch (err) {
+      console.error(err);
+      const loadingMsg = document.getElementById(loadingId);
+      if (loadingMsg) {
+        loadingMsg.innerText = "Error: " + err.message;
+      }
+    } finally {
+      isProcessing = false;
     }
-  </script>
+  }
+
+  function addMessage(text, sender) {
+    const messagesDiv = document.getElementById("messages");
+    const div = document.createElement("div");
+    div.className = `message ${sender}`;
+    div.id = "msg-" + Date.now();
+    div.innerText = text;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    return div.id;
+  }
+</script>
+
 </body>
 </html>
