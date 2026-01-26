@@ -3,507 +3,527 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarety Care (Mock)</title>
+  <title>Clarety Care (Mock) + Clarety Assistant</title>
 
   <style>
     :root{
-      --clarety-green: #81A638;
-      --clarety-blue: #426EAC;
-      --clarety-blue-2: #4f89b7;   /* closer to screenshot bar */
-      --clarety-tab-green: #c7d9a6; /* pale green tabs */
-      --clarety-bg: #eaf4f6;
-      --text: #1b1f23;
-      --muted: #6b7280;
-      --shadow: 0 10px 30px rgba(0,0,0,.10);
+      --clarety-green:#81A638;
+      --clarety-blue:#426EAC;
+      --clarety-yellow:#E8B909;
+      --bg:#f3f7fb;
+      --text:#1b2430;
+      --muted:#5b6b7c;
+      --card:#ffffff;
+      --shadow:0 12px 30px rgba(0,0,0,.18);
+      --shadow-strong:0 18px 44px rgba(0,0,0,.25);
     }
 
-    * { box-sizing: border-box; }
+    /* ---------- PAGE MOCK (you can keep/edit this) ---------- */
+    html,body{height:100%;}
     body{
       margin:0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: var(--text);
-      background: #ffffff;
+      color:var(--text);
+      background:#fff;
     }
 
-    /* ====== TOP HEADER (Clarety-like) ====== */
-    .top-wrap{
-      background: #fff;
+    /* Top “Clarety-like” tabs row */
+    .top-tabs-wrap{
+      background:#e9f3f7;
+      padding:14px 14px 0 14px;
     }
-
-    .module-bar{
+    .top-tabs{
       display:flex;
+      gap:12px;
+      flex-wrap:wrap;
       align-items:flex-end;
-      justify-content:space-between;
-      padding: 10px 14px 0 14px;
-      gap: 12px;
+      justify-content:center;
     }
-
-    .module-tabs{
+    .tab{
+      background:#c8d7a5;
+      color:#7d8f52;
+      padding:14px 22px;
+      border-radius:6px 6px 0 0;
+      font-weight:700;
+      box-shadow:0 2px 0 rgba(0,0,0,.06) inset;
       display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:flex-end;
-    }
-
-    .module-tab{
-      display:flex;
+      gap:10px;
       align-items:center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 6px 6px 0 0;
-      background: var(--clarety-tab-green);
-      color: rgba(0,0,0,.35);
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 1;
-      user-select:none;
-      border: 1px solid rgba(0,0,0,.06);
-      border-bottom: none;
+      min-width:120px;
+      justify-content:center;
+      opacity:.95;
     }
+    .tab .dot{
+      width:18px;height:18px;border-radius:3px;background:#dfe9c6;
+      box-shadow:0 0 0 2px rgba(255,255,255,.4) inset;
+    }
+    .tab.active{
+      background:#59a0c3;
+      color:#fff;
+    }
+    .tab.active .dot{ background: rgba(255,255,255,.35); }
 
-    .module-tab .dot{
-      width: 14px; height: 14px;
-      border-radius: 3px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(0,0,0,.08);
-      display:inline-block;
-    }
-
-    .module-tab.active{
-      background: var(--clarety-blue-2);
-      color: #fff;
-      border-color: rgba(0,0,0,.06);
-    }
-    .module-tab.active .dot{
-      background: rgba(255,255,255,.9);
-      border-color: rgba(255,255,255,.55);
-    }
-    .module-tab.active .heart{
-      margin-right: 2px;
-      font-size: 16px;
-      line-height: 1;
-      opacity: 0.95;
-    }
-
-    .control-area{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding-bottom: 10px;
-      color: rgba(0,0,0,.35);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .control-pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 6px;
-      background: rgba(129,166,56,.35);
-      color: rgba(0,0,0,.35);
-      border: 1px solid rgba(0,0,0,.06);
-    }
-    .control-pill .logo-mini{
-      width: 22px; height: 22px;
-      border-radius: 4px;
-      background: rgba(255,255,255,.6);
-      border: 1px solid rgba(0,0,0,.08);
-    }
-
+    /* Subnav bar */
     .subnav{
-      background: var(--clarety-blue-2);
-      padding: 10px 18px;
+      background:#59a0c3;
+      color:#fff;
+      padding:12px 22px;
       display:flex;
-      gap: 28px;
-      align-items:center;
-      color: rgba(255,255,255,.95);
-      font-weight: 600;
-      border-top: 1px solid rgba(0,0,0,.06);
+      gap:36px;
+      font-weight:700;
+      font-size:18px;
+      box-shadow:0 6px 18px rgba(0,0,0,.12);
+      justify-content:flex-start;
     }
-    .subnav a{
-      color: rgba(255,255,255,.95);
-      text-decoration:none;
-      opacity: .95;
-    }
-    .subnav a:hover{ opacity: 1; text-decoration: underline; }
-
-    /* ====== PAGE CONTENT (mock care topics page) ====== */
-    .hero{
-      background: var(--clarety-bg);
-      padding: 46px 16px 40px;
-      border-bottom: 1px solid rgba(0,0,0,.06);
-    }
-
-    .hero-inner{
-      max-width: 1100px;
-      margin: 0 auto;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap: 16px;
-    }
-
-    .hero h1{
-      margin: 0;
-      font-size: 54px;
-      letter-spacing: -0.02em;
-      color: #3a7f90; /* teal-ish like screenshot */
-      font-weight: 800;
+    .page-hero{
+      background:#e9f3f7;
+      padding:44px 20px 54px 20px;
       text-align:center;
     }
-
+    .page-hero h1{
+      margin:0 0 22px 0;
+      font-size:54px;
+      letter-spacing:-1px;
+      color:#3f7f95;
+      font-weight:800;
+    }
     .searchbar{
-      width: min(760px, 92vw);
-      display:flex;
+      width:min(640px, 90vw);
+      margin:0 auto;
       background:#fff;
-      border: 1px solid rgba(0,0,0,.15);
-      border-radius: 4px;
+      border:1px solid rgba(0,0,0,.18);
+      border-radius:2px;
+      display:flex;
       overflow:hidden;
-      box-shadow: 0 2px 0 rgba(0,0,0,.02);
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
     }
     .searchbar input{
-      flex:1;
       border:0;
-      padding: 16px 16px;
-      font-size: 18px;
       outline:none;
+      padding:18px 18px;
+      font-size:20px;
+      flex:1;
     }
     .searchbar button{
-      width: 64px;
+      width:88px;
       border:0;
       background:#fff;
-      border-left: 1px solid rgba(0,0,0,.12);
       cursor:pointer;
-      font-size: 22px;
+      border-left:1px solid rgba(0,0,0,.12);
+      font-size:28px;
     }
 
-    .content{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 44px 16px 80px;
+    .section{
+      padding:50px 22px 0 22px;
+      max-width:1100px;
+      margin:0 auto;
     }
-
     .section-title{
-      margin: 12px 0 26px;
-      font-size: 56px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      color: #0f172a;
       text-align:center;
+      font-size:62px;
+      margin:0 0 28px 0;
+      font-weight:900;
+      letter-spacing:-1px;
+      color:#0f172a;
     }
-
     .whats-new{
       display:grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 32px;
+      grid-template-columns: 1fr 1fr;
+      gap:38px;
       align-items:center;
-      margin-top: 22px;
+      padding-bottom:40px;
     }
-
     .mock-laptop{
-      background:#f7f9fb;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,.06);
+      background:#fff;
+      border-radius:20px;
+      box-shadow:0 24px 70px rgba(0,0,0,.12);
+      padding:18px;
     }
-
     .mock-laptop img{
-      width: 100%;
-      height: auto;
+      width:100%;
+      height:auto;
       display:block;
-      border-radius: 12px;
+      border-radius:14px;
+    }
+    .wn-text h3{
+      margin:0 0 14px 0;
+      font-size:34px;
+    }
+    .wn-text p{
+      margin:0 0 12px 0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.6;
     }
 
-    .whats-text h3{
-      margin: 0 0 10px;
-      font-size: 34px;
-      font-weight: 900;
+    .browse-title{
+      text-align:center;
+      font-size:68px;
+      margin:34px 0 28px 0;
+      font-weight:900;
+      letter-spacing:-1px;
       color:#0f172a;
     }
-    .whats-text p{
-      margin: 0 0 10px;
-      color: #4b5563;
-      font-size: 18px;
-      line-height: 1.7;
-    }
-
-    .browse{
-      margin-top: 70px;
-    }
-
-    .grid{
+    .cards{
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 28px;
-      margin-top: 34px;
+      gap:26px;
+      padding-bottom:90px;
     }
-
     .card{
-      background: #eaf4f6;
-      border: 1px solid rgba(0,0,0,.06);
-      border-radius: 4px;
-      padding: 26px 22px;
-      min-height: 180px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      gap: 18px;
-    }
-    .icon{
-      width: 74px;
-      height: 74px;
-      border-radius: 12px;
-      border: 4px solid rgba(66,110,172,.55);
-      background: rgba(255,255,255,.55);
-    }
-    .card h4{
-      margin:0;
-      font-size: 20px;
-      font-weight: 800;
-      color:#0f172a;
+      background:#e9f3f7;
+      border:1px solid rgba(0,0,0,.05);
+      border-radius:3px;
+      padding:28px 22px;
       text-align:center;
+      box-shadow:0 10px 28px rgba(0,0,0,.06);
+      min-height:170px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:12px;
     }
+    .card .icon{
+      width:74px;height:74px;border:3px solid #59a0c3;border-radius:12px;
+      opacity:.65;
+    }
+    .card b{ font-size:20px; }
 
-    @media (max-width: 900px){
+    @media (max-width: 920px){
       .whats-new{ grid-template-columns: 1fr; }
-      .section-title{ font-size: 44px; }
-      .hero h1{ font-size: 44px; }
-      .grid{ grid-template-columns: 1fr; }
-      .control-area{ display:none; }
+      .section-title{ font-size:48px; }
+      .browse-title{ font-size:52px; }
+      .cards{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .page-hero h1{ font-size:44px; }
+    }
+    @media (max-width: 520px){
+      .subnav{ font-size:16px; gap:18px; justify-content:center; }
+      .cards{ grid-template-columns: 1fr; }
+      .page-hero h1{ font-size:40px; }
+      .section-title{ font-size:44px; }
     }
 
-    /* ====== CHAT WIDGET (bottom right) ====== */
-    #clarety-chat {
+
+    /* ---------- CHAT WIDGET ---------- */
+    #clarety-chat{
       position: fixed;
-      bottom: 20px;
       right: 20px;
+      bottom: 20px;
       z-index: 9999;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    #clarety-launcher {
-      width: 66px;
-      height: 66px;
+    /* Launcher */
+    #clarety-launcher{
+      width: 84px;               /* 50% larger-ish than typical 56 */
+      height: 84px;
       border-radius: 50%;
-      border: 4px solid rgba(129,166,56,.9);
-      background: rgba(255,255,255,.95);
+      border: none;
+      background: #fff;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0,0,0,.20);
+      box-shadow: var(--shadow-strong);
+      padding: 0;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:0;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Animated ring */
+    #clarety-launcher::before{
+      content:"";
+      position:absolute;
+      inset: -6px;
+      border-radius:50%;
+      border: 6px solid rgba(129,166,56,.55);
+      pointer-events:none;
+      animation: pulseRing 2.2s ease-out infinite;
+      opacity:.85;
+    }
+    @keyframes pulseRing{
+      0%   { transform: scale(0.92); opacity: .70; }
+      60%  { transform: scale(1.04); opacity: .18; }
+      100% { transform: scale(1.08); opacity: 0; }
+    }
+
+    #clarety-launcher:hover{
+      transform: scale(1.02);
+      transition: transform .12s ease;
     }
 
     #clarety-launcher img{
-      width: 92%;
-      height: 92%;
+      width: 74px;
+      height: 74px;
       object-fit: contain;
       display:block;
-      border-radius: 50%;
     }
 
-    #clarety-panel {
-      display: none;
-      width: 380px;
-      height: 560px;
-      background: white;
+    /* Panel */
+    #clarety-panel{
+      display:none;
+      width: 440px;
+      height: 620px;
+      background: #fff;
       border-radius: 18px;
-      box-shadow: 0 18px 40px rgba(0,0,0,.25);
-      position: absolute;
-      bottom: 80px;
+      box-shadow: var(--shadow-strong);
+      position:absolute;
       right: 0;
-      overflow: hidden;
-      flex-direction: column;
-      border: 1px solid rgba(0,0,0,.08);
+      bottom: 96px;
+      overflow:hidden;
+      flex-direction:column;
     }
-    #clarety-panel.open { display: flex; }
+    #clarety-panel.open{ display:flex; }
 
-    #clarety-header {
+    #clarety-header{
       background: var(--clarety-blue);
-      color: white;
-      padding: 16px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      color:#fff;
+      padding: 18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size: 38px;
       font-weight: 800;
-      font-size: 22px;
+      letter-spacing: -0.5px;
     }
-    #clarety-close {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      border: none;
+    #clarety-close{
+      width: 58px;
+      height: 58px;
+      border:0;
+      border-radius: 16px;
       background: rgba(255,255,255,.18);
-      color: white;
-      cursor: pointer;
-      font-size: 26px;
-      line-height: 1;
+      color:#fff;
+      font-size: 34px;
+      cursor:pointer;
     }
 
-    #messages {
-      flex: 1;
-      padding: 14px;
-      overflow-y: auto;
-      background: #ffffff;
+    #messages{
+      flex:1;
+      padding: 16px 16px 10px 16px;
+      overflow-y:auto;
+      background:#fff;
     }
-
-    .message {
-      max-width: 85%;
-      padding: 12px 14px;
+    .message{
+      max-width: 88%;
+      padding: 14px 16px;
       border-radius: 18px;
-      margin-bottom: 10px;
-      font-size: 14px;
-      line-height: 1.45;
+      margin-bottom: 14px;
+      font-size: 22px;
+      line-height: 1.35;
       word-wrap: break-word;
       white-space: pre-wrap;
     }
-
-    .message.user {
-      background: #426EAC;
-      color: white;
-      margin-left: auto;
+    .message.user{
+      background: var(--clarety-blue);
+      color:#fff;
+      margin-left:auto;
+      border-bottom-right-radius: 6px;
+    }
+    .message.bot{
+      background:#eef2f6;
+      color:#1b2430;
+      margin-right:auto;
+      border-bottom-left-radius: 6px;
     }
 
-    .message.bot {
-      background: #eef1f4;
-      color: #111827;
-    }
-
+    /* Input row */
     .chat-input-area{
-      padding: 12px;
-      border-top: 1px solid #eee;
+      padding: 14px;
+      border-top: 1px solid rgba(0,0,0,.08);
       display:flex;
-      gap: 10px;
+      gap: 12px;
       align-items:center;
       background:#fff;
     }
 
-    .chat-input-area input{
-      flex: 1;
-      padding: 12px 14px;
-      border-radius: 22px;
-      border: 1px solid #d1d5db;
-      outline: none;
-      font-size: 15px;
-    }
-
-    .chat-input-area button{
+    /* Upload button wrapper (label) */
+    .image-upload{
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
       background: var(--clarety-green);
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 22px;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 15px;
-    }
-
-    .clip-btn{
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid #e5e7eb;
-      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       cursor:pointer;
-      font-size: 18px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.20);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      position:relative;
+      flex:0 0 auto;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .image-upload:hover{
+      transform: scale(1.06);
+      box-shadow: 0 14px 30px rgba(0,0,0,.28);
+      filter: saturate(1.08);
+    }
+    .image-upload:active{ transform: scale(0.97); }
+
+    /* Subtle animated “spark” to stand out */
+    .image-upload::after{
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius:50%;
+      border: 2px solid rgba(129,166,56,.35);
+      animation: uploadGlow 2.4s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes uploadGlow{
+      0%{ transform: scale(0.92); opacity:.25; }
+      50%{ transform: scale(1.06); opacity:.10; }
+      100%{ transform: scale(0.92); opacity:.25; }
     }
 
-    .doc-link{ display:none; } /* hide links in UI */
+    /* “Selected” dot indicator */
+    .image-upload.has-image::before{
+      content:"";
+      position:absolute;
+      top: 10px;
+      right: 10px;
+      width: 14px;
+      height: 14px;
+      border-radius:50%;
+      background: var(--clarety-yellow);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.9);
+    }
+
+    /* Paperclip icon (SVG) */
+    .image-upload svg{
+      width: 30px;
+      height: 30px;
+      display:block;
+      fill:#fff;
+    }
+
+    .chat-input-area input[type="text"]{
+      flex:1;
+      border: 2px solid rgba(0,0,0,.18);
+      border-radius: 999px;
+      padding: 16px 18px;
+      font-size: 22px;
+      outline:none;
+    }
+
+    .chat-input-area button.send{
+      background: var(--clarety-green);
+      color:#fff;
+      border:0;
+      border-radius: 999px;
+      padding: 0 26px;
+      height: 66px;
+      font-size: 24px;
+      font-weight: 800;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .chat-input-area button.send:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(0,0,0,.24);
+    }
+    .chat-input-area button.send:active{ transform: translateY(0); }
+
+    /* Hide doc links (if your backend returns them, we simply don’t render them) */
+    .doc-link{ display:none !important; }
+
+    /* Mobile: make panel fit screen nicely */
+    @media (max-width: 520px){
+      #clarety-chat{ right: 14px; bottom: 14px; }
+      #clarety-panel{
+        width: min(96vw, 440px);
+        height: min(74vh, 640px);
+        right: 0;
+        bottom: 102px;
+        border-radius: 18px;
+      }
+      #clarety-header{ font-size: 34px; }
+      #clarety-launcher{ width: 86px; height: 86px; }
+      #clarety-launcher img{ width: 76px; height: 76px; }
+      .message{ font-size: 20px; }
+      .image-upload, .chat-input-area button.send{ height: 62px; width: 62px; }
+      .chat-input-area button.send{ width:auto; padding:0 22px; }
+      .chat-input-area input[type="text"]{ font-size: 20px; padding: 14px 16px; }
+    }
   </style>
 </head>
 
 <body>
-  <!-- ===== HEADER ===== -->
-  <div class="top-wrap">
-    <div class="module-bar">
-      <div class="module-tabs">
-        <div class="module-tab"><span class="dot"></span>Content</div>
-        <div class="module-tab"><span class="dot"></span>Contacts</div>
-        <div class="module-tab"><span class="dot"></span>Commerce</div>
-        <div class="module-tab"><span class="dot"></span>Connect</div>
-        <div class="module-tab"><span class="dot"></span>Cases</div>
-        <div class="module-tab"><span class="dot"></span>Context</div>
-        <div class="module-tab"><span class="dot"></span>Company</div>
-        <div class="module-tab"><span class="dot"></span>Extras</div>
-        <div class="module-tab active"><span class="heart">♡</span>Care</div>
-      </div>
-
-      <div class="control-area">
-        <div class="control-pill">
-          <span class="logo-mini"></span>
-          clarety <span style="opacity:.7;">Control</span>
-        </div>
-      </div>
+  <!-- MOCK HEADER -->
+  <div class="top-tabs-wrap">
+    <div class="top-tabs">
+      <div class="tab"><span class="dot"></span>Content</div>
+      <div class="tab"><span class="dot"></span>Contacts</div>
+      <div class="tab"><span class="dot"></span>Commerce</div>
+      <div class="tab"><span class="dot"></span>Connect</div>
+      <div class="tab"><span class="dot"></span>Cases</div>
+      <div class="tab"><span class="dot"></span>Context</div>
+      <div class="tab"><span class="dot"></span>Company</div>
+      <div class="tab"><span class="dot"></span>Extras</div>
+      <div class="tab active"><span class="dot"></span>Care</div>
     </div>
+  </div>
+  <div class="subnav">
+    <div>Topics</div>
+    <div>Monitoring</div>
+    <div>Maintenance</div>
+  </div>
 
-    <div class="subnav">
-      <a href="#">Topics</a>
-      <a href="#">Monitoring</a>
-      <a href="#">Maintenance</a>
+  <div class="page-hero">
+    <h1>Search Clarety Care</h1>
+    <div class="searchbar">
+      <input type="text" placeholder="Search Topics" />
+      <button aria-label="search">🔍</button>
     </div>
   </div>
 
-  <!-- ===== PAGE ===== -->
-  <section class="hero">
-    <div class="hero-inner">
-      <h1>Search Clarety Care</h1>
-      <div class="searchbar">
-        <input type="text" placeholder="Search Topics" />
-        <button aria-label="Search">🔍</button>
-      </div>
-    </div>
-  </section>
-
-  <main class="content">
+  <div class="section">
     <h2 class="section-title">What's New</h2>
-
     <div class="whats-new">
       <div class="mock-laptop">
-        <!-- change this src to your asset -->
+        <!-- Your uploaded laptop image -->
         <img src="assets/laptopimage.png" alt="Clarety dashboard preview" />
       </div>
-
-      <div class="whats-text">
+      <div class="wn-text">
         <h3>Welcome to the New Year!</h3>
-        <p>As we step into the new year, we’d like to take a moment to thank you for your continued support. The year ahead brings fresh opportunities, new goals, and plenty to look forward to.</p>
-        <p>Our team is back and ready to get started after the holiday break, and we’re looking forward to another year of collaboration and progress.</p>
+        <p>
+          As we step into the new year, we’d like to take a moment to thank you for your continued support.
+          The year ahead brings fresh opportunities, new goals, and plenty to look forward to.
+        </p>
+        <p>
+          Our team is back and ready to get started after the holiday break, and we’re looking forward to another year of collaboration and progress.
+        </p>
         <p>Here’s to a positive and successful year ahead. We wish you all the very best for the year to come!</p>
       </div>
     </div>
 
-    <section class="browse">
-      <h2 class="section-title">Browse Categories</h2>
+    <div class="browse-title">Browse Categories</div>
+    <div class="cards">
+      <div class="card"><div class="icon"></div><b>Latest News</b></div>
+      <div class="card"><div class="icon"></div><b>Welcome to Clarety</b></div>
+      <div class="card"><div class="icon"></div><b>Video Tutorials</b></div>
+      <div class="card"><div class="icon"></div><b>CRM</b></div>
+      <div class="card"><div class="icon"></div><b>Website</b></div>
+      <div class="card"><div class="icon"></div><b>Digital Marketing</b></div>
+      <div class="card"><div class="icon"></div><b>Email &amp; SMS Marketing</b></div>
+      <div class="card"><div class="icon"></div><b>Direct Mail</b></div>
+      <div class="card"><div class="icon"></div><b>Giving</b></div>
+    </div>
+  </div>
 
-      <div class="grid">
-        <div class="card"><div class="icon"></div><h4>Latest News</h4></div>
-        <div class="card"><div class="icon"></div><h4>Welcome to Clarety</h4></div>
-        <div class="card"><div class="icon"></div><h4>Video Tutorials</h4></div>
-
-        <div class="card"><div class="icon"></div><h4>CRM</h4></div>
-        <div class="card"><div class="icon"></div><h4>Website</h4></div>
-        <div class="card"><div class="icon"></div><h4>Digital Marketing</h4></div>
-
-        <div class="card"><div class="icon"></div><h4>Email &amp; SMS Marketing</h4></div>
-        <div class="card"><div class="icon"></div><h4>Direct Mail</h4></div>
-        <div class="card"><div class="icon"></div><h4>Giving</h4></div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ===== CHAT WIDGET ===== -->
-  <div id="clarety-chat">
-    <button id="clarety-launcher" aria-label="Open chat">
+  <!-- CHAT WIDGET -->
+  <div id="clarety-chat" aria-label="Clarety Assistant Widget">
+    <button id="clarety-launcher" aria-label="Open Clarety Assistant">
+      <!-- Your launcher logo -->
       <img src="assets/ClaretyAIimage.png" alt="Clarety Core AI" />
     </button>
 
-    <div id="clarety-panel" role="dialog" aria-label="Clarety Assistant">
+    <div id="clarety-panel" role="dialog" aria-modal="false" aria-label="Clarety Assistant">
       <div id="clarety-header">
-        Clarety Assistant
-        <button id="clarety-close" aria-label="Close chat">×</button>
+        <span>Clarety Assistant</span>
+        <button id="clarety-close" aria-label="Close">×</button>
       </div>
 
       <div id="messages">
@@ -511,82 +531,118 @@
       </div>
 
       <div class="chat-input-area">
-        <button class="clip-btn" id="imgBtn" title="Upload image">📎</button>
-        <input id="imgInput" type="file" accept="image/*" style="display:none" />
-        <input type="text" id="userInput" placeholder="Type a message…" />
-        <button id="sendBtn">Send</button>
+        <!-- Upload button (label -> file input). UI-only prominence + animation above -->
+        <label class="image-upload" id="imageUploadBtn" title="Attach an image" aria-label="Attach an image">
+          <input type="file" id="imageInput" accept="image/*" hidden />
+          <!-- Paperclip SVG (white) -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M16.5 6.5l-7.78 7.78a3 3 0 104.24 4.24l8.49-8.49a5 5 0 10-7.07-7.07L6.3 11.02a7 7 0 109.9 9.9l5.66-5.66a1 1 0 10-1.42-1.42l-5.66 5.66a5 5 0 11-7.07-7.07l8.49-8.49a3 3 0 014.24 4.24l-8.49 8.49a1 1 0 01-1.42-1.42l7.78-7.78a1 1 0 10-1.42-1.42z"/>
+          </svg>
+        </label>
+
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Type a message…"
+          autocomplete="off"
+        />
+        <button class="send" id="sendBtn">Send</button>
       </div>
     </div>
   </div>
 
   <script>
-    // IMPORTANT: set to your Render URL (domain only)
+    // IMPORTANT: keep this matching your working backend route
     const API_URL = "https://claretycoreapi.onrender.com/chat";
 
     let isProcessing = false;
-    let pendingImageFile = null;
 
     const launcher = document.getElementById("clarety-launcher");
     const panel = document.getElementById("clarety-panel");
     const closeBtn = document.getElementById("clarety-close");
     const sendBtn = document.getElementById("sendBtn");
-    const inputField = document.getElementById("userInput");
-    const imgBtn = document.getElementById("imgBtn");
-    const imgInput = document.getElementById("imgInput");
+    const inputEl = document.getElementById("userInput");
+    const imageInput = document.getElementById("imageInput");
+    const imageUploadBtn = document.getElementById("imageUploadBtn");
 
-    launcher.onclick = () => panel.classList.toggle("open");
-    closeBtn.onclick = () => panel.classList.remove("open");
+    launcher.addEventListener("click", () => panel.classList.toggle("open"));
+    closeBtn.addEventListener("click", () => panel.classList.remove("open"));
 
-    imgBtn.onclick = () => imgInput.click();
-    imgInput.onchange = () => {
-      if (imgInput.files && imgInput.files[0]) {
-        pendingImageFile = imgInput.files[0];
-        addMessage("[Image ready to send]", "user");
-      }
-    };
-
-    sendBtn.onclick = () => sendMessage();
-    inputField.addEventListener("keypress", (e) => {
+    // Enter to send
+    inputEl.addEventListener("keypress", (e) => {
       if (e.key === "Enter") sendMessage();
+    });
+    sendBtn.addEventListener("click", sendMessage);
+
+    // Pure UI feedback (does NOT change upload logic)
+    imageInput.addEventListener("change", () => {
+      if (imageInput.files && imageInput.files.length > 0) {
+        imageUploadBtn.classList.add("has-image");
+      } else {
+        imageUploadBtn.classList.remove("has-image");
+      }
     });
 
     async function sendMessage() {
       if (isProcessing) return;
 
-      const message = (inputField.value || "").trim();
-      const hasImage = !!pendingImageFile;
+      const message = (inputEl.value || "").trim();
+      const hasImage = imageInput.files && imageInput.files.length > 0;
 
       if (!message && !hasImage) return;
 
       isProcessing = true;
 
+      // Show user message (and if image selected, show a small note)
       if (message) addMessage(message, "user");
-      inputField.value = "";
+      if (hasImage) addMessage("[Image selected]", "user");
+
+      inputEl.value = "";
 
       const loadingId = addMessage("Thinking…", "bot");
 
       try {
-        const formData = new FormData();
-        formData.append("query", message || "");
-        if (hasImage) formData.append("image", pendingImageFile);
+        let response;
 
-        const response = await fetch(API_URL, { method: "POST", body: formData });
-        const data = await response.json();
+        // If an image is attached, send multipart/form-data.
+        // If your backend ignores images, it will still work for text.
+        if (hasImage) {
+          const fd = new FormData();
+          fd.append("query", message || "");
+          fd.append("image", imageInput.files[0]); // field name "image"
 
-        document.getElementById(loadingId)?.remove();
-
-        if (!response.ok) {
-          addMessage(data?.answer || "Sorry — something went wrong.", "bot");
+          response = await fetch(API_URL, {
+            method: "POST",
+            body: fd
+          });
         } else {
-          addMessage(data.answer || "Done.", "bot");
+          response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: message })
+          });
         }
 
-        pendingImageFile = null;
-        imgInput.value = "";
+        const data = await response.json();
 
-      } catch (e) {
-        document.getElementById(loadingId).innerText = "Sorry — something went wrong.";
+        // Remove loading bubble
+        const loadingEl = document.getElementById(loadingId);
+        if (loadingEl) loadingEl.remove();
+
+        // Show answer
+        addMessage(data.answer || "Sorry — I didn’t get a response.", "bot");
+
+        // IMPORTANT: hide links (do nothing with data.links)
+        // (Your earlier screenshots show links clutter—this keeps UI clean.)
+
+      } catch (err) {
+        const loadingEl = document.getElementById(loadingId);
+        if (loadingEl) loadingEl.innerText = "Sorry — something went wrong.";
+        console.error(err);
       } finally {
+        // Clear file input after send so you don’t get stuck “selected”
+        if (imageInput.value) imageInput.value = "";
+        imageUploadBtn.classList.remove("has-image");
         isProcessing = false;
       }
     }
@@ -595,8 +651,8 @@
       const messagesDiv = document.getElementById("messages");
       const div = document.createElement("div");
       div.className = `message ${sender}`;
-      div.id = "msg-" + Date.now();
-      div.innerText = text;
+      div.id = "msg-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+      div.textContent = text;
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
       return div.id;
