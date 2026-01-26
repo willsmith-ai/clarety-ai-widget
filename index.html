@@ -213,7 +213,6 @@
       padding:0;
     }
 
-    /* thinner ring + slightly tighter */
     #clarety-launcher::before{
       content:"";
       position:absolute;
@@ -229,7 +228,6 @@
       100% { transform:scale(1.12); opacity:0; }
     }
 
-    /* fill inner image to 96% */
     #clarety-launcher img{
       width:96%;
       height:96%;
@@ -317,7 +315,6 @@
       background:#fff;
     }
 
-    /* ---------- Attach button (FIXED CLICK ALIGNMENT) ---------- */
     .attach-wrap{
       position:relative;
       width:72px;
@@ -328,7 +325,6 @@
       justify-content:center;
     }
 
-    /* Center the *actual clickable input* exactly over the circle */
     .attach-wrap input[type="file"]{
       position:absolute;
       top:50%;
@@ -371,13 +367,12 @@
       50%{ opacity:.95; transform:translate(-28%,-28%) scale(1.06); }
     }
 
-    /* Clean/crisp paperclip: avoid “smudged” look */
     .attach-btn svg{
       width:34px;
       height:34px;
       z-index:1;
       stroke:#fff;
-      stroke-width:2.4;          /* thinner = cleaner */
+      stroke-width:2.4;
       stroke-linecap:round;
       stroke-linejoin:round;
       fill:none;
@@ -406,7 +401,6 @@
       box-shadow:0 10px 22px rgba(0,0,0,.16);
     }
 
-    /* ---------- Responsive ---------- */
     @media (max-width: 980px){
       .whats-new{ grid-template-columns:1fr; }
       .section-title{ font-size:54px; }
