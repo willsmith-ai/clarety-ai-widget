@@ -2,17 +2,253 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarety Core AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clarety Care (Mock) + Clarety Assistant</title>
+
   <style>
     :root{
       --clarety-green:#81A638;
       --clarety-blue:#426EAC;
-      --bg:#ffffff;
-    }
-    body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#fff; }
+      --clarety-orange:#DD761C;
+      --clarety-yellow:#E8B909;
 
-    /* ===== Widget ===== */
+      --bg:#ffffff;
+      --soft-bg:#eef6f8;     /* light aqua like your screenshots */
+      --soft-card:#edf6f8;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#e5e7eb;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    /* ===== Top app header (mock) ===== */
+    .topbar{
+      background:var(--soft-bg);
+      border-bottom:1px solid #dbe7ea;
+    }
+
+    .topbar-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:10px 16px 0;
+    }
+
+    .app-tabs{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding-bottom:10px;
+    }
+
+    .tab{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:6px;
+      color:#2b4a55;
+      font-weight:700;
+      font-size:14px;
+      background:rgba(255,255,255,0.55);
+      border:1px solid rgba(0,0,0,0.03);
+    }
+
+    .tab.active{
+      background:var(--clarety-blue);
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .tab .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.15);
+    }
+    .tab.active .dot{ background:rgba(255,255,255,0.7); }
+
+    .subnav{
+      background:var(--clarety-blue);
+      color:#fff;
+    }
+    .subnav-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:10px 16px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      font-weight:700;
+      font-size:14px;
+    }
+    .subnav a{
+      color:#e8f1ff;
+      text-decoration:none;
+      opacity:0.95;
+    }
+    .subnav a:hover{ opacity:1; text-decoration:underline; }
+
+    /* ===== Search hero ===== */
+    .hero{
+      background:var(--soft-bg);
+      border-bottom:1px solid #dbe7ea;
+    }
+    .hero-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:42px 16px 34px;
+      text-align:center;
+    }
+    .hero h1{
+      margin:0 0 18px;
+      font-size:40px;
+      letter-spacing:-0.5px;
+      color:#3a7b8d; /* similar teal heading */
+      font-weight:900;
+    }
+
+    .search-wrap{
+      max-width:640px;
+      margin:0 auto;
+      display:flex;
+      align-items:stretch;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:2px;
+      overflow:hidden;
+      box-shadow:0 1px 0 rgba(0,0,0,0.03);
+    }
+    .search-wrap input{
+      flex:1;
+      border:0;
+      padding:16px 14px;
+      font-size:18px;
+      outline:none;
+    }
+    .search-btn{
+      width:62px;
+      border:0;
+      border-left:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    /* ===== Main sections ===== */
+    .section{
+      max-width:1200px;
+      margin:0 auto;
+      padding:60px 16px;
+    }
+
+    .section-title{
+      text-align:center;
+      font-size:64px;
+      font-weight:950;
+      letter-spacing:-1.5px;
+      margin:0 0 30px;
+      color:#0b1220;
+    }
+
+    .whats-new{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap:44px;
+      align-items:center;
+      margin-top:16px;
+    }
+
+    .laptop-card{
+      background:#f8fbfc;
+      border:1px solid #e6eef0;
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 20px 50px rgba(0,0,0,0.08);
+      position:relative;
+    }
+
+    .laptop-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:12px;
+    }
+
+    .wn-text h3{
+      margin:0 0 12px;
+      font-size:36px;
+      font-weight:900;
+    }
+    .wn-text p{
+      margin:0 0 14px;
+      font-size:18px;
+      line-height:1.65;
+      color:var(--muted);
+    }
+
+    .categories{
+      margin-top:26px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:26px;
+    }
+
+    .cat-card{
+      background:var(--soft-card);
+      border:1px solid #dfeaec;
+      border-radius:2px;
+      height:190px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      box-shadow:0 1px 0 rgba(0,0,0,0.03);
+    }
+
+    .cat-icon{
+      width:78px;
+      height:78px;
+      border-radius:18px;
+      border:3px solid rgba(66,110,172,0.55);
+      display:grid;
+      place-items:center;
+      color:rgba(66,110,172,0.8);
+      font-size:40px;
+      background:rgba(255,255,255,0.5);
+    }
+
+    .cat-title{
+      font-size:20px;
+      font-weight:900;
+      color:#0b1220;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .section-title{ font-size:44px; }
+      .whats-new{ grid-template-columns: 1fr; }
+      .wn-text h3{ font-size:28px; }
+      .categories{ grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px){
+      .categories{ grid-template-columns: 1fr; }
+      .hero h1{ font-size:30px; }
+      .search-wrap input{ font-size:16px; }
+    }
+
+    /* ============================================================
+       =================== Clarety Chat Widget =====================
+       ============================================================ */
+
     #clarety-chat {
       position: fixed;
       bottom: 20px;
@@ -38,7 +274,7 @@
       width: 92%;
       height: 92%;
       object-fit: contain;
-      display:block;
+      display: block;
     }
 
     #clarety-panel {
@@ -164,9 +400,114 @@
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Widget -->
+  <!-- ===== Mock Clarety Care page ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="app-tabs">
+        <div class="tab"><span class="dot"></span>Content</div>
+        <div class="tab"><span class="dot"></span>Contacts</div>
+        <div class="tab"><span class="dot"></span>Commerce</div>
+        <div class="tab"><span class="dot"></span>Connect</div>
+        <div class="tab"><span class="dot"></span>Cases</div>
+        <div class="tab"><span class="dot"></span>Context</div>
+        <div class="tab"><span class="dot"></span>Company</div>
+        <div class="tab active"><span class="dot"></span>Care</div>
+        <div style="margin-left:auto; opacity:.75; font-weight:800; font-size:13px;">clarety Control</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subnav">
+    <div class="subnav-inner">
+      <a href="#">Topics</a>
+      <a href="#">Monitoring</a>
+      <a href="#">Maintenance</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Search Clarety Care</h1>
+      <div class="search-wrap">
+        <input type="text" placeholder="Search Topics" />
+        <button class="search-btn" aria-label="Search">🔍</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">What's New</h2>
+
+    <div class="whats-new">
+      <div class="laptop-card">
+        <!-- Put your laptop image in /assets and name it laptopimage.png -->
+        <img class="laptop-img" src="assets/laptopimage.png" alt="Dashboard preview" />
+      </div>
+
+      <div class="wn-text">
+        <h3>Welcome to the New Year!</h3>
+        <p>
+          As we step into the new year, we’d like to take a moment to thank you for your continued support.
+          The year ahead brings fresh opportunities, new goals, and plenty to look forward to.
+        </p>
+        <p>
+          Our team is back and ready to get started after the holiday break, and we’re looking forward to
+          another year of collaboration and progress.
+        </p>
+        <p>
+          Here’s to a positive and successful year ahead. We wish you all the very best for the year to come!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title">Browse Categories</h2>
+
+    <div class="categories">
+      <div class="cat-card">
+        <div class="cat-icon">✦</div>
+        <div class="cat-title">Latest News</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">☁︎</div>
+        <div class="cat-title">Welcome to Clarety</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">▶︎</div>
+        <div class="cat-title">Video Tutorials</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">⛁</div>
+        <div class="cat-title">CRM</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🖥</div>
+        <div class="cat-title">Website</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">👍</div>
+        <div class="cat-title">Digital Marketing</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">📅</div>
+        <div class="cat-title">Email & SMS Marketing</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">✉︎</div>
+        <div class="cat-title">Direct Mail</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">💲</div>
+        <div class="cat-title">Giving</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Clarety Assistant Widget ===== -->
   <div id="clarety-chat">
     <button id="clarety-launcher" aria-label="Open Clarety Assistant" type="button">
       <img src="assets/ClaretyAIimage.png" alt="Clarety" />
@@ -183,7 +524,6 @@
       </div>
 
       <div class="chat-input-area">
-        <!-- Image preview -->
         <div id="previewWrap">
           <img id="previewImg" alt="Preview" />
           <div style="font-size:13px; color:#334155;">
@@ -193,141 +533,133 @@
           <button id="removeImgBtn" type="button">Remove</button>
         </div>
 
-        <!-- Controls -->
         <div class="row">
           <button id="clipBtn" class="btn" type="button" title="Attach image">📎</button>
           <input id="userInput" type="text" placeholder="Type a message…" autocomplete="off" />
           <button id="sendBtn" class="btn" type="button">Send</button>
         </div>
 
-        <!-- Hidden file input -->
         <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" style="display:none" />
       </div>
     </div>
   </div>
 
-<script>
-  const API_URL = "https://claretycoreapi.onrender.com/chat";
-  let isProcessing = false;
+  <script>
+    const API_URL = "https://claretycoreapi.onrender.com/chat";
+    let isProcessing = false;
 
-  // Stable session id for memory
-  const SESSION_KEY = "clarety_chat_session_id";
-  function getSessionId() {
-    let id = localStorage.getItem(SESSION_KEY);
-    if (!id) {
-      id = "sess_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
-      localStorage.setItem(SESSION_KEY, id);
-    }
-    return id;
-  }
-
-  const panel = document.getElementById("clarety-panel");
-  const launcher = document.getElementById("clarety-launcher");
-  const closeBtn = document.getElementById("clarety-close");
-  const sendBtn = document.getElementById("sendBtn");
-  const inputField = document.getElementById("userInput");
-
-  const clipBtn = document.getElementById("clipBtn");
-  const fileInput = document.getElementById("fileInput");
-  const previewWrap = document.getElementById("previewWrap");
-  const previewImg = document.getElementById("previewImg");
-  const previewName = document.getElementById("previewName");
-  const removeImgBtn = document.getElementById("removeImgBtn");
-
-  let attachedFile = null;
-
-  launcher.onclick = () => panel.classList.toggle("open");
-  closeBtn.onclick = () => panel.classList.remove("open");
-  sendBtn.onclick = sendMessage;
-  inputField.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
-
-  clipBtn.onclick = () => fileInput.click();
-
-  fileInput.onchange = () => {
-    const f = fileInput.files && fileInput.files[0];
-    if (!f) return;
-    attachedFile = f;
-
-    previewName.textContent = f.name;
-    previewImg.src = URL.createObjectURL(f);
-    previewWrap.classList.add("show");
-  };
-
-  removeImgBtn.onclick = () => {
-    attachedFile = null;
-    fileInput.value = "";
-    previewImg.src = "";
-    previewName.textContent = "";
-    previewWrap.classList.remove("show");
-  };
-
-  function addMessage(text, sender) {
-    const messagesDiv = document.getElementById("messages");
-    const div = document.createElement("div");
-    div.className = `message ${sender}`;
-    div.innerText = text;
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    return div;
-  }
-
-  async function sendMessage(){
-    if (isProcessing) return;
-
-    const message = inputField.value.trim();
-    if (!message && !attachedFile) return;
-
-    panel.classList.add("open");
-    if (message) addMessage(message, "user");
-    else addMessage("[Image uploaded]", "user");
-
-    inputField.value = "";
-    isProcessing = true;
-    const thinkingEl = addMessage("Thinking…", "bot");
-
-    try {
-      const sessionId = getSessionId();
-
-      let response;
-
-      if (attachedFile) {
-        // multipart upload
-        const fd = new FormData();
-        fd.append("query", message || "");
-        fd.append("sessionId", sessionId);
-        fd.append("image", attachedFile);
-
-        response = await fetch(API_URL, {
-          method: "POST",
-          body: fd
-        });
-
-        // clear attachment after sending
-        removeImgBtn.click();
-      } else {
-        // plain JSON
-        response = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: message, sessionId })
-        });
+    // Stable session id for memory
+    const SESSION_KEY = "clarety_chat_session_id";
+    function getSessionId() {
+      let id = localStorage.getItem(SESSION_KEY);
+      if (!id) {
+        id = "sess_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+        localStorage.setItem(SESSION_KEY, id);
       }
-
-      const dataText = await response.text();
-      if (!response.ok) throw new Error(dataText);
-
-      const data = JSON.parse(dataText);
-      thinkingEl.remove();
-      addMessage(data.answer || "Okay.", "bot");
-
-    } catch (e) {
-      thinkingEl.innerText = "Sorry — I couldn’t connect or process that. Try again.";
-      console.error(e);
-    } finally {
-      isProcessing = false;
+      return id;
     }
-  }
-</script>
+
+    const panel = document.getElementById("clarety-panel");
+    const launcher = document.getElementById("clarety-launcher");
+    const closeBtn = document.getElementById("clarety-close");
+    const sendBtn = document.getElementById("sendBtn");
+    const inputField = document.getElementById("userInput");
+
+    const clipBtn = document.getElementById("clipBtn");
+    const fileInput = document.getElementById("fileInput");
+    const previewWrap = document.getElementById("previewWrap");
+    const previewImg = document.getElementById("previewImg");
+    const previewName = document.getElementById("previewName");
+    const removeImgBtn = document.getElementById("removeImgBtn");
+
+    let attachedFile = null;
+
+    launcher.onclick = () => panel.classList.toggle("open");
+    closeBtn.onclick = () => panel.classList.remove("open");
+    sendBtn.onclick = sendMessage;
+    inputField.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
+
+    clipBtn.onclick = () => fileInput.click();
+
+    fileInput.onchange = () => {
+      const f = fileInput.files && fileInput.files[0];
+      if (!f) return;
+      attachedFile = f;
+
+      previewName.textContent = f.name;
+      previewImg.src = URL.createObjectURL(f);
+      previewWrap.classList.add("show");
+    };
+
+    removeImgBtn.onclick = () => {
+      attachedFile = null;
+      fileInput.value = "";
+      previewImg.src = "";
+      previewName.textContent = "";
+      previewWrap.classList.remove("show");
+    };
+
+    function addMessage(text, sender) {
+      const messagesDiv = document.getElementById("messages");
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerText = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return div;
+    }
+
+    async function sendMessage(){
+      if (isProcessing) return;
+
+      const message = inputField.value.trim();
+      if (!message && !attachedFile) return;
+
+      panel.classList.add("open");
+
+      if (message) addMessage(message, "user");
+      else addMessage("[Image uploaded]", "user");
+
+      inputField.value = "";
+      isProcessing = true;
+      const thinkingEl = addMessage("Thinking…", "bot");
+
+      try {
+        const sessionId = getSessionId();
+        let response;
+
+        if (attachedFile) {
+          const fd = new FormData();
+          fd.append("query", message || "");
+          fd.append("sessionId", sessionId);
+          fd.append("image", attachedFile);
+
+          response = await fetch(API_URL, { method: "POST", body: fd });
+
+          removeImgBtn.click();
+        } else {
+          response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: message, sessionId })
+          });
+        }
+
+        const txt = await response.text();
+        if (!response.ok) throw new Error(txt);
+
+        const data = JSON.parse(txt);
+        thinkingEl.remove();
+        addMessage(data.answer || "Okay.", "bot");
+
+      } catch (e) {
+        thinkingEl.innerText = "Sorry — I couldn’t connect or process that. Try again.";
+        console.error(e);
+      } finally {
+        isProcessing = false;
+      }
+    }
+  </script>
 
 </body>
 </html>
