@@ -313,6 +313,7 @@
       gap:12px;
       align-items:center;
       background:#fff;
+      position:relative;
     }
 
     .attach-wrap{
@@ -401,6 +402,61 @@
       box-shadow:0 10px 22px rgba(0,0,0,.16);
     }
 
+    /* --- Image preview chip (like your old mini box) --- */
+    .image-preview{
+      display:none;
+      position:absolute;
+      left:14px;
+      bottom:92px; /* sits just above the input row */
+      background:#fff;
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:14px;
+      padding:10px;
+      box-shadow:0 18px 34px rgba(0,0,0,.18);
+      align-items:center;
+      gap:10px;
+      max-width:320px;
+    }
+    .image-preview.show{ display:flex; }
+    .image-preview img{
+      width:58px;
+      height:58px;
+      border-radius:12px;
+      object-fit:cover;
+      border:1px solid rgba(0,0,0,.08);
+      background:#f8fafc;
+    }
+    .image-preview .meta{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .image-preview .name{
+      font-weight:900;
+      font-size:13px;
+      color:#0f172a;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:170px;
+    }
+    .image-preview .size{
+      font-size:12px;
+      color:#475569;
+    }
+    .image-preview button{
+      margin-left:auto;
+      border:none;
+      background:#f1f5f9;
+      border-radius:12px;
+      width:36px;
+      height:36px;
+      cursor:pointer;
+      font-size:18px;
+      color:#0f172a;
+    }
+
     @media (max-width: 980px){
       .whats-new{ grid-template-columns:1fr; }
       .section-title{ font-size:54px; }
@@ -422,6 +478,12 @@
       .message{ font-size:17px; }
 
       #clarety-launcher{ width:80px;height:80px; }
+
+      .image-preview{
+        max-width:260px;
+        left:10px;
+      }
+      .image-preview .name{ max-width:130px; }
     }
   </style>
 </head>
@@ -512,6 +574,16 @@
       </div>
 
       <div class="chat-input-area">
+        <!-- Preview bubble -->
+        <div id="imagePreview" class="image-preview" aria-live="polite">
+          <img id="imagePreviewImg" alt="Selected image preview" />
+          <div class="meta">
+            <div id="imagePreviewName" class="name"></div>
+            <div id="imagePreviewSize" class="size"></div>
+          </div>
+          <button id="imagePreviewRemove" title="Remove image" aria-label="Remove image">✕</button>
+        </div>
+
         <div class="attach-wrap" title="Attach image">
           <div class="attach-btn" aria-hidden="true">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -563,20 +635,60 @@
       });
     }
 
+    // ---- Persist selected file in JS (prevents "image disappears") ----
+    const imageInputEl = document.getElementById("imageInput");
+    let selectedImageFile = null;
+
+    // Preview UI elements
+    const previewWrap = document.getElementById("imagePreview");
+    const previewImg = document.getElementById("imagePreviewImg");
+    const previewName = document.getElementById("imagePreviewName");
+    const previewSize = document.getElementById("imagePreviewSize");
+    const previewRemoveBtn = document.getElementById("imagePreviewRemove");
+
+    function clearSelectedImage(){
+      selectedImageFile = null;
+      imageInputEl.value = ""; // allows re-selecting the same file
+      previewWrap.classList.remove("show");
+      previewImg.src = "";
+      previewName.textContent = "";
+      previewSize.textContent = "";
+    }
+
+    imageInputEl.addEventListener("change", () => {
+      selectedImageFile = imageInputEl.files && imageInputEl.files[0] ? imageInputEl.files[0] : null;
+
+      if (!selectedImageFile){
+        clearSelectedImage();
+        return;
+      }
+
+      // Show preview
+      previewName.textContent = selectedImageFile.name;
+      previewSize.textContent = `${Math.round(selectedImageFile.size/1024)} KB`;
+      previewImg.src = URL.createObjectURL(selectedImageFile);
+      previewWrap.classList.add("show");
+    });
+
+    previewRemoveBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      clearSelectedImage();
+    });
+
     async function sendMessage(){
       if (isProcessing) return;
 
       const inputField = document.getElementById("userInput");
-      const imageField = document.getElementById("imageInput");
-
       const message = inputField.value.trim();
-      const imageFile = imageField.files && imageField.files[0] ? imageField.files[0] : null;
+      const imageFile = selectedImageFile; // <-- key change
 
       if (!message && !imageFile) return;
 
       isProcessing = true;
 
-      if (imageFile) addMessage("[Image selected]", "user");
+      // Show user messages
+      if (imageFile) addMessage(`[Image attached: ${imageFile.name}]`, "user");
       if (message) addMessage(message, "user");
 
       inputField.value = "";
@@ -584,17 +696,34 @@
       const loadingId = addMessage("Thinking…", "bot");
 
       try{
-        let imageBase64 = null;
+        let imagePayload = null;
+
         if (imageFile){
-          imageBase64 = await fileToBase64(imageFile);
-          imageField.value = "";
+          imagePayload = await fileToBase64(imageFile);
+
+          // If your server/model expects raw base64 ONLY (not the Data URL),
+          // uncomment the next line:
+          // imagePayload = imagePayload.split(",")[1];
+
+          clearSelectedImage();
         }
+
+        // Debug in chat so you can’t be tricked by silent failures
+        addMessage(`[Debug] sending image=${Boolean(imagePayload)} | query="${message || "Describe this image"}"`, "user");
 
         const response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ query: message || "Describe this image", image: imageBase64 })
+          body: JSON.stringify({
+            query: message || "Describe this image",
+            image: imagePayload
+          })
         });
+
+        if (!response.ok){
+          const text = await response.text();
+          throw new Error(`HTTP ${response.status}: ${text.slice(0, 300)}`);
+        }
 
         const data = await response.json();
 
@@ -604,7 +733,7 @@
         addMessage(data.answer || "Sorry — I didn’t get a response.", "bot");
       }catch(e){
         const loadingEl = document.getElementById(loadingId);
-        if (loadingEl) loadingEl.innerText = "Sorry — something went wrong.";
+        if (loadingEl) loadingEl.innerText = `Sorry — something went wrong.\n${e.message || e}`;
       }finally{
         isProcessing = false;
       }
