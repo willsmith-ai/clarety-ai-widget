@@ -402,12 +402,12 @@
       box-shadow:0 10px 22px rgba(0,0,0,.16);
     }
 
-    /* --- Image preview chip (like your old mini box) --- */
+    /* --- Image preview chip (mini box) --- */
     .image-preview{
       display:none;
       position:absolute;
       left:14px;
-      bottom:92px; /* sits just above the input row */
+      bottom:92px;
       background:#fff;
       border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
@@ -697,13 +697,13 @@
 
       try{
         let imagePayload = null;
+        let mimeType = null;
 
         if (imageFile){
-          imagePayload = await fileToBase64(imageFile);
-
-          // If your server/model expects raw base64 ONLY (not the Data URL),
-          // uncomment the next line:
-          // imagePayload = imagePayload.split(",")[1];
+          const dataUrl = await fileToBase64(imageFile);
+          // IMPORTANT: send RAW base64 only (no "data:image/...;base64," prefix)
+          imagePayload = dataUrl.split(",")[1];
+          mimeType = imageFile.type || "image/png";
 
           clearSelectedImage();
         }
@@ -713,10 +713,12 @@
 
         const response = await fetch(API_URL, {
           method: "POST",
+          cache: "no-store",
           headers: { "Content-Type":"application/json" },
           body: JSON.stringify({
             query: message || "Describe this image",
-            image: imagePayload
+            image: imagePayload,
+            mimeType
           })
         });
 
