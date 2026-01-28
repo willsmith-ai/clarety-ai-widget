@@ -708,9 +708,6 @@
           clearSelectedImage();
         }
 
-        // Debug in chat so you can’t be tricked by silent failures
-        addMessage(`[Debug] sending image=${Boolean(imagePayload)} | query="${message || "Describe this image"}"`, "user");
-
         const response = await fetch(API_URL, {
           method: "POST",
           cache: "no-store",
